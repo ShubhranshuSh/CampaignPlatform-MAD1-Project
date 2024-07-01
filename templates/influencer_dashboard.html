@@ -1,0 +1,367 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : Influencer Dashboard
+{% endblock %}
+
+{% block styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f4f6f8;
+            overflow: hidden;
+        }
+        .container-box {
+            display: flex;
+            width: 100%;
+        }
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+        
+        .sidebar ul li {
+            width: 100%;
+        }
+        
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px; /* Adjust this value to reduce the gap */
+        }
+
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .profile a{
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .profile-name-category{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            padding-top: 13px;
+        }
+        
+        /* Profile Page Styling */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .header button {
+            padding: 10px 20px;
+            background-color: #563d7c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        
+        .profile-header .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .profile-header .profile-info h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .profile-header .profile-info .username {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .profile-header .profile-info .category {
+            font-size: 14px;
+            color: #28a745;
+        }
+        
+        .profile-details {
+            padding: 20px;
+        }
+        
+        .profile-details h2 {
+            margin-top: 0;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-item label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .detail-item input,
+        .detail-item textarea,
+        .detail-item select {
+            background-color: #f4f6f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+        
+        .detail-item textarea {
+            resize: none;
+            height: 100px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        .no-edit {
+            position: relative;
+            display: inline-block;
+        }
+        .no-edit input:hover {
+            position: relative;
+            display: inline-block;
+            cursor: not-allowed;
+        }
+        
+        
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Sponsors</a></li>
+                <li><a href="#">Activity</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{url_for('influencer_dashboard')}}">
+                    <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                    <div class="profile-name-category">
+                        <span class="name">{{user.name}}</span>
+                        <span class="category">Influencer</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <a href="{{url_for('influencer_logout')}}" class="btn btn-outline-danger">Logout</a>
+            </div>
+            <div class="profile-header">
+                <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture)}}" alt="Profile Picture">
+                <div class="profile-info">
+                    <h1>{{user.name}}</h1>
+                    <span class="username">{{user.username}}</span>
+                    <span class="category">{{user.category}}</span>
+                </div>
+            </div>
+            <div class="profile-details">
+                <h2>Edit Details</h2>
+                <form action="{{ url_for('influencer_dashboard_post') }}" method="post">
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label for="fullname">Fullname</label>
+                            <input type="text" id="fullname" name="fullname" value="{{ user.name }}">
+                        </div>
+                        <div class="detail-item no-edit">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
+                        </div>
+                        <div class="detail-item">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="old_password">Old Password</label>
+                            <input type="password" id="old_password" name="old_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="new_password">New Password</label>
+                            <input type="password" id="new_password" name="new_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="confirm_new_password">Confirm New Password</label>
+                            <input type="password" id="confirm_new_password" name="confirm_new_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="category">Category</label>
+                            <select id="category" name="category" onchange="toggleOtherCategoryInput()">
+                                <option value="Fashion" {% if user.category == 'Fashion' %}selected{% endif %}>Fashion</option>
+                                <option value="Beauty" {% if user.category == 'Beauty' %}selected{% endif %}>Beauty</option>
+                                <option value="Fitness and health" {% if user.category == 'Fitness and health' %}selected{% endif %}>Fitness and health</option>
+                                <option value="Travel" {% if user.category == 'Travel' %}selected{% endif %}>Travel</option>
+                                <option value="Food and beverage" {% if user.category == 'Food and beverage' %}selected{% endif %}>Food and beverage</option>
+                                <option value="Lifestyle" {% if user.category == 'Lifestyle' %}selected{% endif %}>Lifestyle</option>
+                                <option value="Finance" {% if user.category == 'Finance' %}selected{% endif %}>Finance</option>
+                                <option value="Automotive" {% if user.category == 'Automotive' %}selected{% endif %}>Automotive</option>
+                                <option value="Entertainment" {% if user.category == 'Entertainment' %}selected{% endif %}>Entertainment</option>
+                                <option value="Education" {% if user.category == 'Education' %}selected{% endif %}>Education</option>
+                                <option value="Business" {% if user.category == 'Business' %}selected{% endif %}>Business</option>
+                                <option value="Art and design" {% if user.category == 'Art and design' %}selected{% endif %}>Art and design</option>
+                                <option value="Sports" {% if user.category == 'Sports' %}selected{% endif %}>Sports</option>
+                                <option value="Sustainability and environmental" {% if user.category == 'Sustainability and environmental' %}selected{% endif %}>Sustainability and environmental</option>
+                                <option value="Politics and social issues" {% if user.category == 'Politics and social issues' %}selected{% endif %}>Politics and social issues</option>
+                                <option value="Other" {% if user.category not in ['Fashion', 'Beauty', 'Fitness and health', 'Travel', 'Food and beverage', 'Lifestyle', 'Finance', 'Automotive', 'Entertainment', 'Education', 'Business', 'Art and design', 'Sports', 'Sustainability and environmental', 'Politics and social issues'] %}selected{% endif %}>Other</option>
+                            </select>
+                            {% if user.category not in ['Fashion', 'Beauty', 'Fitness and health', 'Travel', 'Food and beverage', 'Lifestyle', 'Finance', 'Automotive', 'Entertainment', 'Education', 'Business', 'Art and design', 'Sports', 'Sustainability and environmental', 'Politics and social issues'] %}
+                                <input type="text" id="other_category" name="other_category" value="{{ user.category }}">
+                            {% else %}
+                                <input type="text" id="other_category" name="other_category" class="hidden">
+                            {% endif %}
+                        </div>
+                        
+                        <div class="detail-item">
+                            <label for="interest">Interest</label>
+                            <input type="text" id="interest" name="interest" value="{{ user.interest }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="reach">Reach</label>
+                            <input type="text" id="reach" name="reach" value="{{ user.reach }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="social_media">Social Media</label>
+                            <input type="text" id="social_media" name="social_media" value="{{ user.social_media_links }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+                        </div>
+                        <div class="detail-item" style="grid-column: span 2; text-align: right;">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function toggleOtherCategoryInput() {
+            var categorySelect = document.getElementById("category");
+            var otherCategoryInput = document.getElementById("other_category");
+            if (categorySelect.value === "Other") {
+                otherCategoryInput.classList.remove("hidden");
+            } else {
+                otherCategoryInput.classList.add("hidden");
+            }
+        }
+
+        // Initialize the other category input visibility
+        window.onload = function() {
+            toggleOtherCategoryInput();
+        }
+    </script>
+{% endblock %}

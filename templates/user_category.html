@@ -1,0 +1,111 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : User Category
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .project-logo {
+            width: 900px;
+            height: 300px;
+            margin: 0;
+        }
+    
+        
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #000;
+            margin-top: 4rem;
+            margin-bottom: 1rem;
+            font-family: Poppins, sans-serif;
+        }
+    
+        .fa-solid {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease; 
+        }
+    
+        .cat-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 2rem;
+        }
+    
+        .cat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+    
+        .cat:hover {
+            background-color: #007bff; 
+            color: white; 
+            cursor: pointer;
+        }
+    
+        .cat:hover .fa-solid {
+            color: white; 
+        }
+    
+        .cat h3 {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: color 0.3s ease; 
+        }
+    
+        .cat:hover h3 {
+            color: white; 
+        }
+        .cat-box .cat a {
+            text-decoration: none;
+            color: black;
+        }
+        
+    </style>
+
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="logo">
+        <img src="/static/Project Logo.svg" alt="project-logo">
+    </div>
+    <h1>Continue As</h1>
+    <div class="cat-box">
+        <div class="cat">
+            <a href="{{url_for('influencer_login')}}">
+                <i class="fa-solid fa-user"></i>
+                <h3>INFLUENCER</h3>
+            </a>
+        </div>
+        <div class="cat">
+            <a href="{{url_for('company_login')}}">
+                <i class="fa-solid fa-building-user"></i>        
+                <h3>COMPANY</h3>
+            </a>
+    </div>
+{% endblock %}

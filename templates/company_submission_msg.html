@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+
+{% block styles %}
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+            font-family: poppins,sans-serif;
+            font-weight: 600;
+            color: #4BB543;
+        }
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-top: 2rem;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+    
+{% endblock %}
+
+{% block content %}
+    <H1>Wohooo!! You Got Registered Successfully</H1>
+
+    <button><a href="{{url_for('company_login')}}">Log In</a></button>
+{% endblock %}

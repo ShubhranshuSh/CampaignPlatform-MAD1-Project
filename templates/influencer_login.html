@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : influencer Login
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .logo{
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .project-logo {
+            width: 800px; 
+            height: 200px; 
+            margin-top: 2rem;
+        }
+        .form-box {
+            margin-top: 0.5rem; 
+            width: 40%;
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            border-radius: 5px; 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+        }
+        .form-box h3 {
+            text-align: center; 
+            margin-bottom: 1.5rem; 
+        }
+        .form-box .form-group {
+            margin-bottom: 1rem; 
+        }
+        .form-box .form-group label {
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        
+        .form-box .form-group input {
+            width: 100%; 
+            padding: 0.5rem; 
+            font-size: 1rem; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+
+        .form-box .form-group button {
+            width: 100%; 
+            padding: 0.5rem; 
+            font-size: 1rem; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            margin: 0 auto;
+            display: block;
+            margin-top: 1rem;
+        }
+        .form-box .form-group button:hover {
+            background-color: #0056b3; 
+        }
+        .form-box .submission {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .form-box .already-admin-text {
+            font-size: 1rem; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        .form-box .already-admin-text a {
+            color: #007bff; 
+            text-decoration: none; 
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="logo">
+        <img src="/static/Project Logo.svg" alt="Porject-Logo" class="project-logo">
+    </div>
+    <div class="form-box">
+        <h3>Influencer Login</h3>
+        <form action="" class="form" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            <div class="submission">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <label class="already-admin-text"><a href="{{url_for('influencer_register')}}">New User?</a></label>
+            </div>
+        </form>
+        
+    </div>
+{% endblock %}

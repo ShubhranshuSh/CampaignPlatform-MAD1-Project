@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    <style>
+        body {
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content%}
+    <h1 class="h1 text-success">Profile Updated Successfully!!</h1>
+    <a href="{{ url_for('influencer_dashboard') }}" class="btn btn-primary">Back to Profile</a>
+{% endblock %}

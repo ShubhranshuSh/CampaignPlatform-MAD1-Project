@@ -1,0 +1,249 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : Influencer Registration
+{% endblock %}
+
+{% block styles %}
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .logo {
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-top: 2rem;
+        }
+
+        .project-logo {
+            width: 100%;
+            max-width: 1000px; 
+            height: auto; 
+            margin-top: 2rem;
+        }
+
+        .form-box {
+            margin: 3rem auto; 
+            width: 40%;
+            min-width: 300px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-box h3 {
+            text-align: center; 
+            margin-bottom: 1.5rem; 
+            font-family: poppins,sans-serif;
+            font-weight: 600;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .form-section-content {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem; 
+        }
+
+        .form-group label {
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            color: #333; 
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%; 
+            padding: 0.5rem; 
+            font-size: 1rem; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            margin-top: 0.5rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            width: 100%; 
+            padding: 0.75rem; 
+            font-size: 1rem; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+
+        .submission {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-box {
+                width: 80%;
+            }
+        }
+        .form-box .already-influencer-text {
+            font-size: 1rem; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        .form-box .already-influencer-text a {
+            color: #007bff; 
+            text-decoration: none; 
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="logo">
+        <img src="/static/Project Logo.svg" alt="project-logo" class="project-logo">
+    </div>
+    <div class="form-box">
+        <h3>Influencer Register</h3>
+        <form method="POST" action="/influencer_register" enctype="multipart/form-data">
+            <div class="form-section">
+                <h3>Personal Info</h3>
+                <div class="form-section-content">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" name="fullname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Work Profile</h3>
+                <div class="form-section-content">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" onchange="toggleOtherCategory()" required>
+                            <option value="">Select a category</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="beauty">Beauty</option>
+                            <option value="fitness_health">Fitness and health</option>
+                            <option value="travel">Travel</option>
+                            <option value="food_beverage">Food and beverage</option>
+                            <option value="lifestyle">Lifestyle</option>
+                            <option value="finance">Finance</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="education">Education</option>
+                            <option value="business">Business</option>
+                            <option value="art_design">Art and design</option>
+                            <option value="sports">Sports</option>
+                            <option value="sustainability_environment">Sustainability and environmental</option>
+                            <option value="politics_social_issues">Politics and social issues</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <input type="text" id="other_category" name="other_category" placeholder="Please specify" style="display:none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest">Interest</label>
+                        <input type="text" id="interest" name="interest" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reach">Reach</label>
+                        <input type="number" id="reach" name="reach" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="social_media">Social Media Link</label>
+                        <input type="url" id="social_media" name="social_media" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_picture">Profile Picture</label>
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group submission">
+                <button type="submit">Register</button>
+            </div>
+
+            <label class="already-influencer-text"><a href="{{url_for('influencer_login')}}">Already a user?</a></label>
+
+        </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleOtherCategory() {
+        var category = document.getElementById('category');
+        var otherCategory = document.getElementById('other_category');
+        if (category.value === 'other') {
+            otherCategory.style.display = 'block';
+        } else {
+            otherCategory.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.form-section h3').forEach(function(sectionHeader) {
+            sectionHeader.addEventListener('click', function() {
+                let content = this.nextElementSibling;
+                content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}
