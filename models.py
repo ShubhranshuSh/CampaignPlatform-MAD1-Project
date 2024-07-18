@@ -1,5 +1,6 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy(app)
@@ -29,19 +30,31 @@ class Influencer(db.Model):
 class Company(db.Model):
     __tablename__ = 'company'
     id = db.Column(db.Integer, primary_key=True)
-    company_name = db.Column(db.String(150), nullable=False)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
+    company_name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
-    address = db.Column(db.String(250), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
     industry = db.Column(db.String(100), nullable=False)
     other_industry = db.Column(db.String(100), nullable=True)
-    website = db.Column(db.String(250), nullable=False)
+    website = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    social_media_link = db.Column(db.String(250), nullable=False)
-    logo = db.Column(db.String(250), nullable=False)
+    social_media_link = db.Column(db.String(200), nullable=False)
+    logo = db.Column(db.String(200), nullable=False)
+    campaigns = db.relationship('Campaign', backref='company', lazy=True)
 
+class Campaign(db.Model):
+    __tablename__ = 'campaign'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    budget = db.Column(db.Float, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 with app.app_context():
     db.create_all()

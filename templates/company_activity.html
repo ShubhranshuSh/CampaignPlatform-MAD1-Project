@@ -1,0 +1,308 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : Company Activity
+{% endblock %}
+
+{% block styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f4f6f8;
+            overflow: hidden;
+        }
+        .container-box {
+            display: flex;
+            width: 100%;
+        }
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+        
+        .sidebar ul li {
+            width: 100%;
+        }
+        
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px; /* Adjust this value to reduce the gap */
+        }
+
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .profile a{
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .profile-name-category{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            padding-top: 13px;
+        }
+        .container .activity-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+        }
+
+        .container .activity-heading h1 {
+            font-size: 60px;
+            font-weight: bold;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Campaign list styling */
+        .campaign {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .campaign:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .campaign-main-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .campaign-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campaign-title a {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Lexend Deca', sans-serif;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .campaign-title a:hover {
+            color: #7289da;
+        }
+
+        .campaign-title p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .campaign-actions a {
+            margin: 0 5px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .campaign-actions {
+            position: relative;
+        }
+
+        
+
+        .campaign-details {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .campaign p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+
+        .campaign-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Influencer</a></li>
+            <li><a href="{{url_for('company_activity')}}">Activity</a></li>
+            <li><a href="#">Help & Support</a></li>
+        </ul>
+        <div class="profile">
+            <a href="{{ url_for('company_dashboard') }}">
+                <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
+                <div class="profile-name-category">
+                    <span class="company_name">{{ user.company_name }}</span>
+                    <span class="category">Company</span>
+                </div>
+            </a>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="activity-heading">
+            <h1>Your Activity</h1>
+            <a href="{{url_for('campaign_add')}}" class="btn btn-outline-success"><i class="fa-solid fa-plus"></i> Add</a>
+        </div>
+        <hr>
+        <!-- Other dashboard content -->
+
+        {% for campaign in campaigns %}
+        <div class="campaign">
+            <div class="campaign-main-details">
+                <div class="campaign-title">
+                    <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" >{{ campaign.title }}</a>
+                    <p>#{{ campaign.id }}</p>
+                </div>
+                <div class="campaign-actions">
+                    <a href="{{ url_for('campaign_edit', campaign_id=campaign.id) }}" class="btn btn-outline-secondary">
+                        <i class="fa fa-pencil "></i>
+                    </a>
+                    <a href="{{ url_for('campaign_delete', campaign_id=campaign.id) }}" class="btn btn-outline-danger">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="campaign-details">
+                <div>
+                    <strong>Budget:</strong> ${{ campaign.budget }}
+                </div> | 
+                <div>
+                    <strong>End-Date:</strong> {{ campaign.end_date.strftime('%d %b') }}
+                </div> | 
+                <div>
+                    <strong>Status:</strong> {{ campaign.status }}
+                </div>
+            </div>
+
+            <div class="campaign-meta">
+                <small class="campaign-timestamp" data-created-at="{{ campaign.created_at.isoformat() }}"></small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateTimestamps = () => {
+                const timestamps = document.querySelectorAll('.campaign-timestamp');
+                timestamps.forEach(timestamp => {
+                    const createdAt = new Date(timestamp.dataset.createdAt);
+                    const now = new Date();
+                    const secondsAgo = Math.floor((now - createdAt) / 1000);
+
+                    let displayText = '';
+
+                    if (secondsAgo < 60) {
+                        displayText = 'just now';
+                    } else if (secondsAgo < 3600) {
+                        const minsAgo = Math.floor(secondsAgo / 60);
+                        displayText = `${minsAgo} min${minsAgo > 1 ? 's' : ''} ago`;
+                    } else if (secondsAgo < 86400) {
+                        const hoursAgo = Math.floor(secondsAgo / 3600);
+                        displayText = `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`;
+                    } else {
+                        const daysAgo = Math.floor(secondsAgo / 86400);
+                        displayText = `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
+                    }
+
+                    timestamp.textContent = displayText;
+                });
+            };
+
+            updateTimestamps();
+            setInterval(updateTimestamps, 60000); // Update timestamps every minute
+        });
+    </script>
+
+{% endblock %}

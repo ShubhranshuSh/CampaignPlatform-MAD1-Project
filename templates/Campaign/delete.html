@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP : Delete Campaign
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .content {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .content h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+    </style>    
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h1>Delete Campaign</h1>
+        <p>Are you sure you want to delete this campaign?</p>
+        <form method="POST" action="">
+            <button type="submit" class="btn btn-danger btn-block">Delete Campaign</button>
+            <a href="{{ url_for('company_activity') }}" class="btn btn-secondary btn-block">Cancel</a>
+        </form>
+    </div>
+{% endblock %}
