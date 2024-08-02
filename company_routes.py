@@ -205,11 +205,9 @@ def campaign_created():
 @app.route('/company_activity')
 @company_auth_required
 def company_activity():
-    user=Company.query.get(session['company_id'])
-    campaign= Campaign.query.filter_by(company_id=session['company_id']).all()
-    # return render_template('company_activity.html' , user=user)
-    return render_template('company_activity.html', campaigns=campaign,user=user)
-
+    user = Company.query.get(session['company_id'])
+    campaign = Campaign.query.filter_by(company_id=session['company_id']).all()
+    return render_template('company_activity.html', campaigns=campaign, user=user)
 
 @app.route('/campaign/add')
 @company_auth_required
@@ -224,9 +222,11 @@ def campaign_add_post():
     budget = request.form.get('budget')
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
-    status = request.form.get('status')  # Get the status from the form
+    status = request.form.get('status')
+    category = request.form.get('category')
+    visibility = request.form.get('visibility')
 
-    if not all([title, description, budget, start_date, end_date, status]):
+    if not all([title, description, budget, start_date, end_date, status, category, visibility]):
         flash('All fields are required')
         return redirect(url_for('campaign_add'))
 
@@ -244,29 +244,32 @@ def campaign_add_post():
         start_date=start_date,
         end_date=end_date,
         company_id=session['company_id'],
-        status=status,  # Set the status from the form
+        status=status,
+        category=category,
+        visibility=visibility,  # Add visibility to campaign
         created_at=datetime.utcnow()
     )
 
     db.session.add(new_campaign)
     db.session.commit()
 
-    return redirect(url_for('campaign_created'))
-
+    return redirect(url_for('company_activity'))
 
 @app.route('/campaign/<int:campaign_id>')
 @company_auth_required
 def campaign_view(campaign_id):
-    return "View campaign"
+    campaign = Campaign.query.get(campaign_id)
+    user = Company.query.get(session['company_id'])
+    return render_template('Campaign/show.html', campaign=campaign, user=user)
 
 @app.route('/campaign/<int:campaign_id>/edit')
 @company_auth_required
 def campaign_edit(campaign_id):
-    campaign=Campaign.query.get(campaign_id)
+    campaign = Campaign.query.get(campaign_id)
     if not campaign:
         flash('Campaign not found')
         return redirect(url_for('company_activity'))
-    return render_template('Campaign/edit.html',campaign=campaign)
+    return render_template('Campaign/edit.html', campaign=campaign)
 
 @app.route('/campaign/<int:campaign_id>/edit', methods=['POST'])
 @company_auth_required
@@ -279,8 +282,10 @@ def campaign_edit_post(campaign_id):
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
     status = request.form.get('status')
+    category = request.form.get('category')
+    visibility = request.form.get('visibility')
 
-    if not all([title, description, budget, start_date, end_date, status]):
+    if not all([title, description, budget, start_date, end_date, status, category, visibility]):
         flash('All fields are required')
         return redirect(url_for('campaign_edit', campaign_id=campaign.id))
 
@@ -297,6 +302,8 @@ def campaign_edit_post(campaign_id):
     campaign.start_date = start_date
     campaign.end_date = end_date
     campaign.status = status
+    campaign.category = category
+    campaign.visibility = visibility  # Update visibility
 
     db.session.commit()
 
@@ -306,17 +313,14 @@ def campaign_edit_post(campaign_id):
 @company_auth_required
 def campaign_delete(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-
     return render_template('Campaign/delete.html', campaign=campaign)
 
 @app.route('/campaign/<int:campaign_id>/delete', methods=['POST'])
 @company_auth_required
 def campaign_delete_post(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-
     db.session.delete(campaign)
     db.session.commit()
-
     flash('Campaign has been deleted successfully.')
     return redirect(url_for('company_activity'))
 

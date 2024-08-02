@@ -1,17 +1,22 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
+from pytz import timezone
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy(app)
-
 
 class Admin(db.Model):
     __tablename__ = 'admin'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
-    name= db.Column(db.String(150), nullable=False)
+    name = db.Column(db.String(150), nullable=False)
+
+influencer_campaign_association = db.Table('influencer_campaign_association',
+    db.Column('influencer_id', db.Integer, db.ForeignKey('influencers.id'), primary_key=True),
+    db.Column('campaign_id', db.Integer, db.ForeignKey('campaign.id'), primary_key=True)
+)
 
 class Influencer(db.Model):
     __tablename__ = 'influencers'
@@ -26,6 +31,7 @@ class Influencer(db.Model):
     social_media_links = db.Column(db.String(255), nullable=False)
     bio = db.Column(db.String(255), nullable=False)
     profile_picture = db.Column(db.String(255), nullable=False)
+    campaigns = db.relationship('Campaign', secondary=influencer_campaign_association, back_populates='influencers')
 
 class Company(db.Model):
     __tablename__ = 'company'
@@ -54,16 +60,19 @@ class Campaign(db.Model):
     end_date = db.Column(db.Date, nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False, default='pending')
+    category = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    visibility = db.Column(db.String(50), nullable=False, default='public')
+    influencers = db.relationship('Influencer', secondary=influencer_campaign_association, back_populates='campaigns')
+
+    @property
+    def created_at_ist(self):
+        utc_time = self.created_at.replace(tzinfo=timezone('UTC'))
+        ist_time = utc_time.astimezone(timezone('Asia/Kolkata'))
+        return ist_time
 
 with app.app_context():
     db.create_all()
 
-
-    #to check whether there's an admin or not
-    admin=Admin.query.filter_by(username='admin').first()
-    if not admin:
-        password_hash = generate_password_hash('admin')
-        admin=Admin(username='admin',password_hash=password_hash,name="Admin")
-        db.session.add(admin)
-        db.session.commit()
+    # To check whether there's an admin or not
+    admin = Admin.query.filter_by(username='admin').first()

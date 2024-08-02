@@ -1,7 +1,8 @@
+
 {% extends 'layout.html' %}
 
 {% block title %}
-    IESCP : Company Activity
+    IESCP : Influencer Home
 {% endblock %}
 
 {% block styles %}
@@ -12,7 +13,6 @@
             padding: 0;
             height: 100vh;
             background-color: #f4f6f8;
-            overflow: hidden;
         }
         .container-box {
             display: flex;
@@ -112,18 +112,46 @@
             justify-content: center;
             padding-top: 13px;
         }
-        .container .activity-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            
+        .content {
+            flex: 1;
+            padding: 20px;
+            padding-top: 100px; /* Ensure content is not hidden behind fixed filter */
+            margin-left: 250px; /* Adjust content to not be hidden behind the sidebar */
         }
-
-        .container .activity-heading h1 {
-            font-size: 60px;
-            font-weight: bold;
-            font-family: 'Lexend Deca', sans-serif;
-            font-weight: 600;
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 250px); /* Adjust width to account for the sidebar */
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 250px; /* Align it right next to the sidebar */
+            z-index: 1000; /* Ensure it stays on top of other content */
+        }
+        .filter-container .form-group {
+            margin-bottom: 0;
+            margin-right: 15px;
+            flex: 1;
+        }
+        .filter-container .form-group:last-child {
+            margin-right: 0;
+        }
+        .filter-container select {
+            width: 100%;
+        }
+        .filter-container button {
+            margin-left: 15px;
+        }
+        .form-inline {
+            display: flex;
+            align-items: center;
+            width: 100%;
         }
 
         /* Campaign list styling */
@@ -136,24 +164,20 @@
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
         }
-
         .campaign:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
-
         .campaign-main-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-
         .campaign-title {
             display: flex;
             flex-direction: column;
         }
-
         .campaign-title a {
             font-size: 24px;
             font-weight: bold;
@@ -161,39 +185,23 @@
             color: #333;
             text-decoration: none;
         }
-
         .campaign-title a:hover {
             color: #7289da;
         }
-
         .campaign-title p {
             font-size: 14px;
             color: #555;
         }
-
-        .campaign-actions a {
-            margin: 0 5px;
-            font-size: 18px;
-            color: #555;
-        }
-
-        .campaign-actions {
-            position: relative;
-        }
-
         .campaign-details {
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
         }
-        
         .campaign p {
             font-size: 14px;
             color: #666;
             margin-bottom: 20px;
         }
-
-
         .campaign-meta {
             display: flex;
             justify-content: space-between;
@@ -207,70 +215,85 @@
     <div class="container-box">
         <div class="sidebar">
             <div class="logo">IESCP</div>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Influencer</a></li>
-                <li><a href="{{url_for('company_activity')}}">Activity</a></li>
-                <li><a href="#">Help & Support</a></li>
-            </ul>
-            <div class="profile">
-                <a href="{{ url_for('company_dashboard') }}">
-                    <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
-                    <div class="profile-name-category">
-                        <span class="company_name">{{ user.company_name }}</span>
-                        <span class="category">Company</span>
-                    </div>
-                </a>
-            </div>
+        <ul>
+            <li><a href="{{url_for('influencer_home')}}">Home</a></li>
+            <li><a href="#">Activity</a></li>
+            <li><a href="#">Help & Support</a></li>
+        </ul>
+        <div class="profile">
+            <a href="{{url_for('influencer_dashboard')}}">
+                <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                <div class="profile-name-category">
+                    <span class="name">{{user.name}}</span>
+                    <span class="category">Influencer</span>
+                </div>
+            </a>
         </div>
-        <div class="container">
-            <div class="activity-heading">
-                <h1>Your Activity</h1>
-                <a href="{{url_for('campaign_add')}}" class="btn btn-outline-success"><i class="fa-solid fa-plus"></i> Add</a>
+        </div>
+        <div class="content">
+            <div class="filter-container">
+                <form method="GET" action="{{ url_for('influencer_home') }}" class="form-inline">
+                    <div class="form-group">
+                        <label for="category" class="mr-2">Category</label>
+                        <select name="category" id="category" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Fitness and health">Fitness and health</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Food and beverage">Food and beverage</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Automotive">Automotive</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Education">Education</option>
+                            <option value="Business">Business</option>
+                            <option value="Art and design">Art and design</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Sustainability and environmental">Sustainability and environmental</option>
+                            <option value="Politics and social issues">Politics and social issues</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sort" class="mr-2">Sort by</label>
+                        <select name="sort" id="sort" class="form-control">
+                            <option value="latest">Latest</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
             </div>
-            <hr>
-            <!-- Other dashboard content -->
-
-            {% for campaign in campaigns %}
-            <div class="campaign">
-                <div class="campaign-main-details">
-                    <div class="campaign-title">
-                        <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
-                        <p>#{{ campaign.id }}</p>
+            <div class="campaigns-container">
+                <!-- Campaigns will be displayed here -->
+                {% for campaign in campaigns %}
+                <div class="campaign">
+                    <div class="campaign-main-details">
+                        <div class="campaign-title">
+                            <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" >{{ campaign.title }}</a>
+                            <p>{{ campaign.company_name }}</p>
+                        </div>
                     </div>
-                    <div class="campaign-actions">
-                        <a href="{{ url_for('campaign_edit', campaign_id=campaign.id) }}" class="btn btn-outline-secondary">
-                            <i class="fa fa-pencil "></i>
-                        </a>
-                        <a href="{{ url_for('campaign_delete', campaign_id=campaign.id) }}" class="btn btn-outline-danger">
-                            <i class="fa fa-trash"></i>
-                        </a>
+                    <div class="campaign-details">
+                        <div>
+                            <strong>Budget:</strong> ${{ campaign.budget }}
+                        </div> | 
+                        <div>
+                            <strong>End-Date:</strong> {{ campaign.end_date.strftime('%d %b') }}
+                        </div> | 
+                        <div>
+                            <strong>Category:</strong> {{ campaign.category }}
+                        </div> |
+                        <div>
+                            <strong>Status:</strong> {{ campaign.status }}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="campaign-details">
-                    <div>
-                        <strong>Budget:</strong> &#x20B9; {{ campaign.budget }}
-                    </div> | 
-                    <div>
-                        <strong>End-Date:</strong> {{ campaign.end_date.strftime('%d %b') }}
-                    </div> | 
-                    <div>
-                        <strong>Category:</strong> {{ campaign.category }}
-                    </div> |
-                    <div>
-                        <strong>Status:</strong> {{ campaign.status }}
-                    </div> |
-                    <div>
-                        <strong>Visibility:</strong> {{ campaign.visibility }}
+                    <div class="campaign-meta">
+                        <small class="campaign-timestamp" data-created-at="{{ campaign.created_at.isoformat() }}"></small>
                     </div>
                 </div>
-
-                <div class="campaign-meta">
-                    <small class="campaign-timestamp" data-created-at="{{ campaign.created_at_ist.isoformat() }}"></small>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 {% endblock %}

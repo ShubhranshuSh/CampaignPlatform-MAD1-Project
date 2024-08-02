@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, url_for, ses
 import os
 from werkzeug.utils import secure_filename
 from app import app
-from models import db, Influencer, Company, Admin
+from models import db, Influencer, Company, Admin , Campaign
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -179,6 +179,14 @@ def influencer_dashboard_post():
 
     db.session.commit()
     return redirect(url_for('update_message'))
+
+
+# @app.route('/influencer/home')
+# @influencer_auth_required
+# def influencer_home():
+#     user=Influencer.query.filter_by(id=session['influencer_id']).first()
+#     campaign=Campaign.query.all()
+#     return render_template('influencer_home.html',user=user,campaign=campaign)
 
 
 @app.route('/influencer_logout')
