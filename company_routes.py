@@ -197,6 +197,85 @@ def company_dashboard_post():
     db.session.commit()
     return redirect(url_for('update_message'))
 
+
+@app.route('/company/home', methods=['GET'])
+@company_auth_required
+def company_home():
+    user=Company.query.get(session['company_id'])
+    category = request.args.get('category', '')
+    sort = request.args.get('sort', 'latest')
+    
+    if category:
+        campaigns = Campaign.query.filter_by(category=category)
+    else:
+        campaigns = Campaign.query
+
+    if sort == 'oldest':
+        campaigns = campaigns.order_by(Campaign.created_at.asc()).all()
+    else:
+        campaigns = campaigns.order_by(Campaign.created_at.desc()).all()
+    
+    categories = [c.category for c in Campaign.query.distinct(Campaign.category)]
+    return render_template('company_home.html', campaigns=campaigns, categories=categories, selected_category=category, selected_sort=sort,user=user)
+
+
+@app.route('/company/influencer_search', methods=['GET'])
+@company_auth_required
+def influencer_search():
+    user = Company.query.get(session['company_id'])
+    
+    selected_category = request.args.get('category', '')
+
+    if selected_category:
+        influencers = Influencer.query.filter_by(category=selected_category).all()
+    else:
+        influencers = Influencer.query.all()
+
+    categories = [
+        "fashion", 
+        "beauty", 
+        "fitness and health", 
+        "travel", 
+        "food and beverage", 
+        "lifestyle", 
+        "finance", 
+        "automotive", 
+        "entertainment", 
+        "education", 
+        "business", 
+        "art and design", 
+        "sports", 
+        "sustainability and environmental", 
+        "politics and social issues"
+    ]
+
+    return render_template(
+        'influencer_search.html',
+        influencers=influencers,
+        categories=categories,
+        selected_category=selected_category,
+        user=user
+    )
+
+
+
+@app.route('/company/influencer/<int:influencer_id>')
+@company_auth_required
+def influencer_view(influencer_id):
+    influencer = Influencer.query.get(influencer_id)
+    user = Company.query.get(session['company_id'])
+    return render_template('influencer_show.html', influencer=influencer, user=user)
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/campaign_created')
 @company_auth_required
 def campaign_created():
