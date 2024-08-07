@@ -272,9 +272,10 @@
                     <div class="campaign">
                         <div class="campaign-main-details">
                             <div class="campaign-title">
-                                <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
+                                <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
                                 <p>By {{ campaign.company.company_name }}</p>
                             </div>
+                            
                         </div>
                         <div class="campaign-details">
                             <p>{{ campaign.description }}</p>

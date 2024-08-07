@@ -71,6 +71,16 @@ class Campaign(db.Model):
         ist_time = utc_time.astimezone(timezone('Asia/Kolkata'))
         return ist_time
 
+class InterestedCampaigns(db.Model):
+    __tablename__ = 'interested_campaigns'
+    id = db.Column(db.Integer, primary_key=True)
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
+    expressed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    influencer = db.relationship('Influencer', backref=db.backref('interested_campaigns', lazy=True))
+    campaign = db.relationship('Campaign', backref=db.backref('interested_influencers', lazy=True))
+
 with app.app_context():
     db.create_all()
 
