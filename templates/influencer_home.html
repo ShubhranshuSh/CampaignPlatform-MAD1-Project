@@ -1,4 +1,3 @@
-
 {% extends 'layout.html' %}
 
 {% block title %}
@@ -8,10 +7,9 @@
 {% block styles %}
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
             background-color: #f4f6f8;
         }
         .container-box {
@@ -31,7 +29,7 @@
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
-            position: sticky;
+            position: fixed;
             top: 0;
             height: 100vh;
             overflow: auto;
@@ -79,7 +77,7 @@
         .profile .category {
             font-size: 14px;
             color: #999;
-            margin-top: 5px; /* Adjust this value to reduce the gap */
+            margin-top: 5px;
         }
 
         .sidebar .profile img {
@@ -97,14 +95,14 @@
             padding: 10px;
             margin-bottom: 20px;
         }
-        .profile a{
+        .profile a {
             display: flex;
             align-items: center;
             text-align: center;
             justify-content: center;
             gap: 5px;
         }
-        .profile-name-category{
+        .profile-name-category {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -115,29 +113,35 @@
         .content {
             flex: 1;
             padding: 20px;
-            padding-top: 100px; /* Ensure content is not hidden behind fixed filter */
-            margin-left: 250px; /* Adjust content to not be hidden behind the sidebar */
+            padding-left: 270px; /* This offset ensures content is not under the sidebar */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: calc(100% - 250px); /* Width adjusted to account for sidebar */
         }
         .filter-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px 20px;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
-            width: calc(100% - 250px); /* Adjust width to account for the sidebar */
-            max-width: 1200px;
+            width: auto;
+            max-width: 800px; /* Added max-width for better responsiveness */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
-            left: 250px; /* Align it right next to the sidebar */
-            z-index: 1000; /* Ensure it stays on top of other content */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 1000;
+            flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
         }
         .filter-container .form-group {
             margin-bottom: 0;
             margin-right: 15px;
             flex: 1;
+            min-width: 150px; /* Ensures a minimum width for form elements */
         }
         .filter-container .form-group:last-child {
             margin-right: 0;
@@ -152,9 +156,18 @@
             display: flex;
             align-items: center;
             width: 100%;
+            flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
         }
 
-        /* Campaign list styling */
+        .campaign-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 90px; /* Adjusting for fixed filter container */
+        }
+
         .campaign {
             background-color: #ffffff;
             padding: 20px;
@@ -163,6 +176,8 @@
             margin: 20px 0;
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
+            width: calc(100% - 40px); /* Adjusted to take the full width minus some padding */
+            max-width: 1000px; /* Maximum width for larger screens */
         }
         .campaign:hover {
             transform: translateY(-5px);
@@ -198,14 +213,14 @@
             margin-bottom: 10px;
         }
         .campaign p {
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
             margin-bottom: 20px;
         }
         .campaign-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 14px;
             color: #888;
         }
     </style>
@@ -215,120 +230,62 @@
     <div class="container-box">
         <div class="sidebar">
             <div class="logo">IESCP</div>
-        <ul>
-            <li><a href="{{url_for('influencer_home')}}">Home</a></li>
-            <li><a href="#">Activity</a></li>
-            <li><a href="#">Help & Support</a></li>
-        </ul>
-        <div class="profile">
-            <a href="{{url_for('influencer_dashboard')}}">
-                <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
-                <div class="profile-name-category">
-                    <span class="name">{{user.name}}</span>
-                    <span class="category">Influencer</span>
-                </div>
-            </a>
-        </div>
+            <ul>
+                <li><a href="{{url_for('influencer_home')}}">Home</a></li>
+                <li><a href="#">Requests</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{url_for('influencer_dashboard')}}">
+                    <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                    <div class="profile-name-category">
+                        <span class="name">{{user.name}}</span>
+                        <span class="category">Influencer</span>
+                    </div>
+                </a>
+            </div>
         </div>
         <div class="content">
             <div class="filter-container">
-                <form method="GET" action="{{ url_for('influencer_home') }}" class="form-inline">
+                <form method="GET" action="" class="form-inline">
                     <div class="form-group">
                         <label for="category" class="mr-2">Category</label>
                         <select name="category" id="category" class="form-control">
                             <option value="">All Categories</option>
-                            <option value="Fashion">Fashion</option>
-                            <option value="Beauty">Beauty</option>
-                            <option value="Fitness and health">Fitness and health</option>
-                            <option value="Travel">Travel</option>
-                            <option value="Food and beverage">Food and beverage</option>
-                            <option value="Lifestyle">Lifestyle</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Automotive">Automotive</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Education">Education</option>
-                            <option value="Business">Business</option>
-                            <option value="Art and design">Art and design</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Sustainability and environmental">Sustainability and environmental</option>
-                            <option value="Politics and social issues">Politics and social issues</option>
+                            {% for category in categories %}
+                                <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="sort" class="mr-2">Sort by</label>
                         <select name="sort" id="sort" class="form-control">
-                            <option value="latest">Latest</option>
-                            <option value="oldest">Oldest</option>
+                            <option value="latest" {% if selected_sort == 'latest' %}selected{% endif %}>Latest</option>
+                            <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
                 </form>
             </div>
-            <div class="campaigns-container">
-                <!-- Campaigns will be displayed here -->
+            <div class="campaign-list">
                 {% for campaign in campaigns %}
-                <div class="campaign">
-                    <div class="campaign-main-details">
-                        <div class="campaign-title">
-                            <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" >{{ campaign.title }}</a>
-                            <p>{{ campaign.company_name }}</p>
+                    <div class="campaign">
+                        <div class="campaign-main-details">
+                            <div class="campaign-title">
+                                <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
+                                <p>By {{ campaign.company.company_name }}</p>
+                            </div>
+                        </div>
+                        <div class="campaign-details">
+                            <p>{{ campaign.description }}</p>
+                        </div>
+                        <div class="campaign-meta">
+                            <span>Category: {{ campaign.category }}</span>
+                            <span>Posted on: {{ campaign.created_at.strftime('%Y-%m-%d') }}</span>
                         </div>
                     </div>
-                    <div class="campaign-details">
-                        <div>
-                            <strong>Budget:</strong> ${{ campaign.budget }}
-                        </div> | 
-                        <div>
-                            <strong>End-Date:</strong> {{ campaign.end_date.strftime('%d %b') }}
-                        </div> | 
-                        <div>
-                            <strong>Category:</strong> {{ campaign.category }}
-                        </div> |
-                        <div>
-                            <strong>Status:</strong> {{ campaign.status }}
-                        </div>
-                    </div>
-                    <div class="campaign-meta">
-                        <small class="campaign-timestamp" data-created-at="{{ campaign.created_at.isoformat() }}"></small>
-                    </div>
-                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const updateTimestamps = () => {
-                const timestamps = document.querySelectorAll('.campaign-timestamp');
-                timestamps.forEach(timestamp => {
-                    const createdAt = new Date(timestamp.dataset.createdAt);
-                    const now = new Date();
-                    const secondsAgo = Math.floor((now - createdAt) / 1000);
-
-                    let displayText = '';
-
-                    if (secondsAgo < 60) {
-                        displayText = 'just now';
-                    } else if (secondsAgo < 3600) {
-                        const minsAgo = Math.floor(secondsAgo / 60);
-                        displayText = `${minsAgo} min${minsAgo > 1 ? 's' : ''} ago`;
-                    } else if (secondsAgo < 86400) {
-                        const hoursAgo = Math.floor(secondsAgo / 3600);
-                        displayText = `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`;
-                    } else {
-                        const daysAgo = Math.floor(secondsAgo / 86400);
-                        displayText = `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
-                    }
-
-                    timestamp.textContent = displayText;
-                });
-            };
-
-            updateTimestamps();
-            setInterval(updateTimestamps, 60000); // Update timestamps every minute
-        });
-    </script>
 {% endblock %}

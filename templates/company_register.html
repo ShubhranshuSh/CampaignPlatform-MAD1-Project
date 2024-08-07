@@ -4,7 +4,6 @@
     IESCP : Company Registration
 {% endblock %}
 
-
 {% block styles %}
     <style>
         body, html {
@@ -132,18 +131,13 @@
     </style>
 {% endblock %}
 
-
-
-
-
-
 {% block content %}
     <div class="logo">
         <img src="/static/Project Logo.svg" alt="project-logo" class="project-logo">
     </div>
     <div class="form-box">
         <h3>Company Registration</h3>
-        <form method="POST" action="/company_register" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="form-section">
                 <h3>Personal Info</h3>
                 <div class="form-section-content">
@@ -183,7 +177,7 @@
                 <div class="form-section-content">
                     <div class="form-group">
                         <label for="industry">Industry</label>
-                        <select id="industry" name="industry" onchange="toggleOtherIndustry()" required>
+                        <select id="industry" name="industry" required>
                             <option value="">Select an industry</option>
                             <option value="accomodation">Accomodation</option>
                             <option value="accommodation_food_services">Accommodation and Food Services</option>
@@ -203,9 +197,7 @@
                             <option value="computer_electronics_products_manufacturing">Computer and Electronics Products Manufacturing</option>
                             <option value="construction">Construction</option>
                             <option value="courier_messenger">Courier and Messenger</option>
-                            <option value="other">Other</option>
                         </select>
-                        <input type="text" id="other_industry" name="other_industry" placeholder="Please specify" style="display:none;">
                     </div>
                     <div class="form-group">
                         <label for="website">Website URL</label>
@@ -236,16 +228,6 @@
 
 {% block scripts %}
     <script>
-        function toggleOtherIndustry() {
-            var industry = document.getElementById('industry');
-            var otherIndustry = document.getElementById('other_industry');
-            if (industry.value === 'other') {
-                otherIndustry.style.display = 'block';
-            } else {
-                otherIndustry.style.display = 'none';
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.form-section h3').forEach(function(sectionHeader) {
                 sectionHeader.addEventListener('click', function() {

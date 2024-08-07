@@ -75,4 +75,9 @@ with app.app_context():
     db.create_all()
 
     # To check whether there's an admin or not
-    admin = Admin.query.filter_by(username='admin').first()
+    admin=Admin.query.filter_by(username='admin').first()
+    if not admin:
+        password_hash = generate_password_hash('admin')
+        admin=Admin(username='admin',password_hash=password_hash,name="Admin")
+        db.session.add(admin)
+        db.session.commit()

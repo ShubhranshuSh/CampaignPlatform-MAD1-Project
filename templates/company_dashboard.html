@@ -7,22 +7,22 @@
 {% block styles %}
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
             background-color: #f4f6f8;
-            overflow: hidden;
         }
+
         .container-box {
             display: flex;
             width: 100%;
         }
+
         a {
             text-decoration: none;
             color: whitesmoke;
         }
-        
+
         .sidebar {
             width: 250px;
             background-color: #28282B;
@@ -31,12 +31,13 @@
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
             height: 100vh;
             overflow: auto;
         }
-        
+
         .sidebar .logo {
             font-size: 24px;
             font-weight: bold;
@@ -44,42 +45,44 @@
             font-family: 'Lexend Deca', sans-serif;
             font-weight: 600;
         }
-        
+
         .sidebar ul {
             list-style-type: none;
             padding: 0;
             width: 100%;
         }
-        
+
         .sidebar ul li {
             width: 100%;
         }
-        
+
         .sidebar ul li a {
             display: block;
             padding: 10px 20px;
             color: white;
             text-decoration: none;
         }
-        
+
         .sidebar ul li a:hover {
-            background-color: rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.1);
         }
-        
+
         .sidebar .profile {
             margin-top: auto;
             text-align: center;
             padding: 10px;
         }
+
         .profile .name {
             font-size: 16px;
             font-weight: bold;
             color: white;
         }
+
         .profile .category {
             font-size: 14px;
             color: #999;
-            margin-top: 5px; /* Adjust this value to reduce the gap */
+            margin-top: 5px;
         }
 
         .sidebar .profile img {
@@ -97,14 +100,16 @@
             padding: 10px;
             margin-bottom: 20px;
         }
-        .profile a{
+
+        .profile a {
             display: flex;
             align-items: center;
             text-align: center;
             justify-content: center;
             gap: 5px;
         }
-        .profile-name-category{
+
+        .profile-name-category {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -112,7 +117,7 @@
             justify-content: center;
             padding-top: 13px;
         }
-        
+
         /* Profile Page Styling */
         .main-content {
             flex-grow: 1;
@@ -120,8 +125,10 @@
             flex-direction: column;
             overflow-y: auto;
             height: 100vh;
+            margin-left: 250px; /* Ensure there's enough margin to accommodate the fixed sidebar */
+            padding: 20px; /* Add padding to give some space around the content */
         }
-        
+
         .header {
             display: flex;
             justify-content: flex-end;
@@ -130,7 +137,7 @@
             background-color: white;
             border-bottom: 1px solid #ddd;
         }
-        
+
         .header button {
             padding: 10px 20px;
             background-color: #563d7c;
@@ -139,7 +146,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        
+
         .profile-header {
             display: flex;
             align-items: center;
@@ -147,58 +154,58 @@
             background-color: white;
             border-bottom: 1px solid #ddd;
         }
-        
+
         .profile-header img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             margin-right: 20px;
         }
-        
+
         .profile-header .profile-info {
             display: flex;
             flex-direction: column;
         }
-        
+
         .profile-header .profile-info h1 {
             margin: 0;
             font-size: 24px;
         }
-        
+
         .profile-header .profile-info .username {
             font-size: 14px;
             color: #999;
         }
-        
+
         .profile-header .profile-info .category {
             font-size: 14px;
             color: #28a745;
         }
-        
+
         .profile-details {
             padding: 20px;
         }
-        
+
         .profile-details h2 {
             margin-top: 0;
         }
-        
+
         .details-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
-        
+
         .detail-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         .detail-item label {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .detail-item input,
         .detail-item textarea,
         .detail-item select {
@@ -208,23 +215,43 @@
             border: 1px solid #ddd;
             width: 100%;
         }
-        
+
         .detail-item textarea {
             resize: none;
             height: 100px;
         }
-        
+
         .hidden {
             display: none;
         }
+
         .no-edit {
             position: relative;
             display: inline-block;
         }
+
         .no-edit input:hover {
             position: relative;
             display: inline-block;
             cursor: not-allowed;
+        }
+        button[type="submit"] {
+            background-color: #007bff; /* Blue background color */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 15px; /* Padding for a comfortable click area */
+            font-size: 16px; /* Larger font size */
+            font-weight: bold; /* Bold text */
+            cursor: pointer; /* Pointer cursor on hover */
+            width: 100%; /* Full width */
+            margin-top: 20px; /* Margin at the top */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        
+        /* Hover effect for the button */
+        button[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
         }
         
     </style>
@@ -234,151 +261,101 @@
     <div class="container-box">
         <div class="sidebar">
             <div class="logo">IESCP</div>
-        <ul>
-            <li><a href="{{url_for('company_home')}}">Home</a></li>
-            <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
-            <li><a href="{{url_for('company_activity')}}">Activity</a></li>
-            <li><a href="#">Help & Support</a></li>
-        </ul>
-        <div class="profile">
-            <a href="{{ url_for('company_dashboard') }}">
-                <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
-                <div class="profile-name-category">
-                    <span class="company_name">{{ user.company_name }}</span>
-                    <span class="category">Company</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Profile Page -->
-    </div>
-    <div class="main-content">
-        <div class="header">
-            <a href="{{ url_for('company_logout') }}" class="btn btn-outline-danger">Logout</a>
-        </div>
-        <div class="profile-header">
-            <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
-            <div class="profile-info">
-                <h1>{{ user.company_name }}</h1>
-                <span class="username">{{ user.username }}</span>
-                <span class="category">{{ user.industry }}</span>
+            <ul>
+                <li><a href="{{url_for('company_home')}}">Home</a></li>
+                <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
+                <li><a href="{{url_for('company_activity')}}">Activity</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{ url_for('company_dashboard') }}">
+                    <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
+                    <div class="profile-name-category">
+                        <span class="company_name">{{ user.company_name }}</span>
+                        <span class="category">Company</span>
+                    </div>
+                </a>
             </div>
         </div>
-        <div class="profile-details">
-            <h2>Edit Details</h2>
-            <form action="{{ url_for('company_dashboard_post') }}" method="post">
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <label for="company_name">Company Name</label>
-                        <input type="text" id="company_name" name="company_name" value="{{ user.company_name }}">
-                    </div>
-                    <div class="detail-item no-edit">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
-                    </div>
-                    <div class="detail-item">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="{{ user.email }}">
-                    </div>
-                    <div class="detail-item">
-                        <label for="old_password">Old Password</label>
-                        <input type="password" id="old_password" name="old_password">
-                    </div>
-                    <div class="detail-item">
-                        <label for="new_password">New Password</label>
-                        <input type="password" id="new_password" name="new_password">
-                    </div>
-                    <div class="detail-item">
-                        <label for="confirm_new_password">Confirm New Password</label>
-                        <input type="password" id="confirm_new_password" name="confirm_new_password">
-                    </div>
-                    <div class="detail-item">
-                        <label for="industry">Industry</label>
-                        <select id="industry" name="industry" onchange="toggleOtherIndustryInput()">
-                            <option value="Accommodation" {% if user.industry == 'Accommodation' %}selected{% endif %}>Accommodation</option>
-                            <option value="Accommodation and Food Services" {% if user.industry == 'Accommodation and Food Services' %}selected{% endif %}>Accommodation and Food Services</option>
-                            <option value="Administrative and support and waste management and remediation services" {% if user.industry == 'Administrative and support and waste management and remediation services' %}selected{% endif %}>Administrative and support and waste management and remediation services</option>
-                            <option value="Agriculture, forestry, fishing and hunting" {% if user.industry == 'Agriculture, forestry, fishing and hunting' %}selected{% endif %}>Agriculture, forestry, fishing and hunting</option>
-                            <option value="Air transportation" {% if user.industry == 'Air transportation' %}selected{% endif %}>Air transportation</option>
-                            <option value="Ambulatory Health Care Service" {% if user.industry == 'Ambulatory Health Care Service' %}selected{% endif %}>Ambulatory Health Care Service</option>
-                            <option value="Amusement, gambling and recreation industry" {% if user.industry == 'Amusement, gambling and recreation industry' %}selected{% endif %}>Amusement, gambling and recreation industry</option>
-                            <option value="Animal production" {% if user.industry == 'Animal production' %}selected{% endif %}>Animal production</option>
-                            <option value="Apparel manufacturing" {% if user.industry == 'Apparel manufacturing' %}selected{% endif %}>Apparel manufacturing</option>
-                            <option value="Arts, Entertainment and recreation" {% if user.industry == 'Arts, Entertainment and recreation' %}selected{% endif %}>Arts, Entertainment and recreation</option>
-                            <option value="Beverage and tobacco products manufacturing" {% if user.industry == 'Beverage and tobacco products manufacturing' %}selected{% endif %}>Beverage and tobacco products manufacturing</option>
-                            <option value="Broadcasting" {% if user.industry == 'Broadcasting' %}selected{% endif %}>Broadcasting</option>
-                            <option value="Building material and garden equipment and supplies dealers" {% if user.industry == 'Building material and garden equipment and supplies dealers' %}selected{% endif %}>Building material and garden equipment and supplies dealers</option>
-                            <option value="Chemical manufacturing" {% if user.industry == 'Chemical manufacturing' %}selected{% endif %}>Chemical manufacturing</option>
-                            <option value="Clothing and clothing accessories stores" {% if user.industry == 'Clothing and clothing accessories stores' %}selected{% endif %}>Clothing and clothing accessories stores</option>
-                            <option value="Computer and electronics products manufacturing" {% if user.industry == 'Computer and electronics products manufacturing' %}selected{% endif %}>Computer and electronics products manufacturing</option>
-                            <option value="Construction" {% if user.industry == 'Construction' %}selected{% endif %}>Construction</option>
-                            <option value="Courier and messengers" {% if user.industry == 'Courier and messengers' %}selected{% endif %}>Courier and messengers</option>
-                            <option value="Other" {% if user.industry not in ['Accommodation', 'Accommodation and Food Services', 'Administrative and support and waste management and remediation services', 'Agriculture, forestry, fishing and hunting', 'Air transportation', 'Ambulatory Health Care Service', 'Amusement, gambling and recreation industry', 'Animal production', 'Apparel manufacturing', 'Arts, Entertainment and recreation', 'Beverage and tobacco products manufacturing', 'Broadcasting', 'Building material and garden equipment and supplies dealers', 'Chemical manufacturing', 'Clothing and clothing accessories stores', 'Computer and electronics products manufacturing', 'Construction', 'Courier and messengers'] %}selected{% endif %}>Other</option>
-                        </select>
-                        {% if user.industry not in ['Accommodation', 'Accommodation and Food Services', 'Administrative and support and waste management and remediation services', 'Agriculture, forestry, fishing and hunting', 'Air transportation', 'Ambulatory Health Care Service', 'Amusement, gambling and recreation industry', 'Animal production', 'Apparel manufacturing', 'Arts, Entertainment and recreation', 'Beverage and tobacco products manufacturing', 'Broadcasting', 'Building material and garden equipment and supplies dealers', 'Chemical manufacturing', 'Clothing and clothing accessories stores', 'Computer and electronics products manufacturing', 'Construction', 'Courier and messengers'] %}
-                            <input type="text" id="other_industry" name="other_industry" value="{{ user.industry }}">
-                        {% else %}
-                            <input type="text" id="other_industry" name="other_industry" class="hidden">
-                        {% endif %}
-                    </div>
-                    <div class="detail-item">
-                        <label for="phone_number">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}">
-                    </div>
-                    <div class="detail-item">
-                        <label for="address">Address</label>
-                        <input type="text" id="address" name="address" value="{{ user.address }}">
-                    </div>
-                    <div class="detail-item">
-                        <label for="website_url">Website URL</label>
-                        <input type="text" id="website_url" name="website_url" value="{{ user.website }}">
-                    </div>
-                    <div class="detail-item">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description">{{ user.description }}</textarea>
-                    </div>
-                    <div class="detail-item">
-                        <label for="social_media">Social Media</label>
-                        <input type="text" id="social_media" name="social_media" value="{{ user.social_media_link }}">
-                    </div>
-                    <div class="detail-item" style="grid-column: span 2; text-align: right;">
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
+        <div class="main-content">
+            <div class="header">
+                <a href="{{ url_for('company_logout') }}" class="btn btn-outline-danger">Logout</a>
+            </div>
+            <div class="profile-header">
+                <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
+                <div class="profile-info">
+                    <h1>{{ user.company_name }}</h1>
+                    <span class="username">{{ user.username }}</span>
+                    <span class="category">{{ user.industry }}</span>
                 </div>
-            </form>
+            </div>
+            <div class="profile-details">
+                <h2>Edit Details</h2>
+                <form action="{{ url_for('company_dashboard_post') }}" method="post">
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label for="company_name">Company Name</label>
+                            <input type="text" id="company_name" name="company_name" value="{{ user.company_name }}">
+                        </div>
+                        <div class="detail-item no-edit">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
+                        </div>
+                        <div class="detail-item">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="old_password">Old Password</label>
+                            <input type="password" id="old_password" name="old_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="new_password">New Password</label>
+                            <input type="password" id="new_password" name="new_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="confirm_new_password">Confirm New Password</label>
+                            <input type="password" id="confirm_new_password" name="confirm_new_password">
+                        </div>
+                        <div class="detail-item">
+                            <label for="industry">Industry</label>
+                            <select id="industry" name="industry">
+                                <option value="Accommodation" {% if user.industry == 'Accommodation' %}selected{% endif %}>Accommodation</option>
+                                <option value="Automotive" {% if user.industry == 'Automotive' %}selected{% endif %}>Automotive</option>
+                                <option value="Consumer Packaged Goods" {% if user.industry == 'Consumer Packaged Goods' %}selected{% endif %}>Consumer Packaged Goods</option>
+                                <option value="Education" {% if user.industry == 'Education' %}selected{% endif %}>Education</option>
+                                <option value="Energy" {% if user.industry == 'Energy' %}selected{% endif %}>Energy</option>
+                                <option value="Financial Services" {% if user.industry == 'Financial Services' %}selected{% endif %}>Financial Services</option>
+                                <option value="Food and Beverage" {% if user.industry == 'Food and Beverage' %}selected{% endif %}>Food and Beverage</option>
+                                <option value="Government" {% if user.industry == 'Government' %}selected{% endif %}>Government</option>
+                                <option value="Healthcare" {% if user.industry == 'Healthcare' %}selected{% endif %}>Healthcare</option>
+                                <option value="Insurance" {% if user.industry == 'Insurance' %}selected{% endif %}>Insurance</option>
+                                <option value="IT" {% if user.industry == 'IT' %}selected{% endif %}>IT</option>
+                                <option value="Logistics" {% if user.industry == 'Logistics' %}selected{% endif %}>Logistics</option>
+                                <option value="Manufacturing" {% if user.industry == 'Manufacturing' %}selected{% endif %}>Manufacturing</option>
+                                <option value="Marketing" {% if user.industry == 'Marketing' %}selected{% endif %}>Marketing</option>
+                                <option value="Media and Entertainment" {% if user.industry == 'Media and Entertainment' %}selected{% endif %}>Media and Entertainment</option>
+                                <option value="Real Estate" {% if user.industry == 'Real Estate' %}selected{% endif %}>Real Estate</option>
+                                <option value="Retail" {% if user.industry == 'Retail' %}selected{% endif %}>Retail</option>
+                                <option value="Telecommunication" {% if user.industry == 'Telecommunication' %}selected{% endif %}>Telecommunication</option>
+                            </select>
+                        </div>
+                        <div class="detail-item">
+                            <label for="about">About</label>
+                            <textarea id="about" name="about">{{ user.about }}</textarea>
+                        </div>
+                        <div class="detail-item">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" name="website" value="{{ user.website }}">
+                        </div>
+                        <div class="detail-item">
+                            <label for="address">Address</label>
+                            <textarea id="address" name="address">{{ user.address }}</textarea>
+                        </div>
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
         </div>
     </div>
-    </div>
 {% endblock %}
-{% block scripts %}
-    <script>
-        function toggleOtherCategoryInput() {
-            var categorySelect = document.getElementById("category");
-            var otherCategoryInput = document.getElementById("other_category");
-            if (categorySelect.value === "Other") {
-                otherCategoryInput.classList.remove("hidden");
-            } else {
-                otherCategoryInput.classList.add("hidden");
-                otherCategoryInput.value = ""; // Clear the input field when not 'Other'
-            }
-        }
-
-        function toggleOtherIndustryInput() {
-            var industrySelect = document.getElementById("industry");
-            var otherIndustryInput = document.getElementById("other_industry");
-            if (industrySelect.value === "Other") {
-                otherIndustryInput.classList.remove("hidden");
-            } else {
-                otherIndustryInput.classList.add("hidden");
-                otherIndustryInput.value = ""; // Clear the input field when not 'Other'
-            }
-        }
-
-        // Initialize the other category and industry input visibility
-        window.onload = function() {
-            toggleOtherCategoryInput();
-            toggleOtherIndustryInput();
-        }
-    </script>
-{% endblock %}
-

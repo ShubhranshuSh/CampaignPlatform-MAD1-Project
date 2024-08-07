@@ -132,15 +132,13 @@
     </style>
 {% endblock %}
 
-
-
 {% block content %}
     <div class="logo">
         <img src="/static/Project Logo.svg" alt="project-logo" class="project-logo">
     </div>
     <div class="form-box">
         <h3>Influencer Register</h3>
-        <form method="POST" action="/influencer_register" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="form-section">
                 <h3>Personal Info</h3>
                 <div class="form-section-content">
@@ -172,26 +170,24 @@
                 <div class="form-section-content">
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <select id="category" name="category" onchange="toggleOtherCategory()" required>
+                        <select id="category" name="category" required>
                             <option value="">Select a category</option>
                             <option value="fashion">Fashion</option>
                             <option value="beauty">Beauty</option>
-                            <option value="fitness_health">Fitness and health</option>
+                            <option value="fitness and health">Fitness and health</option>
                             <option value="travel">Travel</option>
-                            <option value="food_beverage">Food and beverage</option>
+                            <option value="food and beverage">Food and beverage</option>
                             <option value="lifestyle">Lifestyle</option>
                             <option value="finance">Finance</option>
                             <option value="automotive">Automotive</option>
                             <option value="entertainment">Entertainment</option>
                             <option value="education">Education</option>
                             <option value="business">Business</option>
-                            <option value="art_design">Art and design</option>
+                            <option value="art and design">Art and design</option>
                             <option value="sports">Sports</option>
-                            <option value="sustainability_environment">Sustainability and environmental</option>
-                            <option value="politics_social_issues">Politics and social issues</option>
-                            <option value="other">Other</option>
+                            <option value="sustainability and environmental">Sustainability and environmental</option>
+                            <option value="politics and social issues">Politics and social issues</option>
                         </select>
-                        <input type="text" id="other_category" name="other_category" placeholder="Please specify" style="display:none;">
                     </div>
                     <div class="form-group">
                         <label for="interest">Interest</label>
@@ -221,29 +217,19 @@
             </div>
 
             <label class="already-influencer-text"><a href="{{url_for('influencer_login')}}">Already a user?</a></label>
-
         </form>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    function toggleOtherCategory() {
-        var category = document.getElementById('category');
-        var otherCategory = document.getElementById('other_category');
-        if (category.value === 'other') {
-            otherCategory.style.display = 'block';
-        } else {
-            otherCategory.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.form-section h3').forEach(function(sectionHeader) {
-            sectionHeader.addEventListener('click', function() {
-                let content = this.nextElementSibling;
-                content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.form-section h3').forEach(function(sectionHeader) {
+                sectionHeader.addEventListener('click', function() {
+                    let content = this.nextElementSibling;
+                    content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
+                });
             });
         });
-    });
-</script>
+    </script>
 {% endblock %}

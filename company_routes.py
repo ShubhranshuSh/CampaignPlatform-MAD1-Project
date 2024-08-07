@@ -24,11 +24,11 @@ def company_auth_required(func):
 def company_submission_msg():
     return render_template('company_submission_msg.html')
 
-@app.route('/company_register')
+@app.route('/company/register')
 def company_register():
     return render_template('company_register.html')
 
-@app.route('/company_register', methods=['POST'])
+@app.route('/company/register', methods=['POST'])
 def company_register_post():
     company_name = request.form.get('company_name')
     username = request.form.get('username')
@@ -95,11 +95,11 @@ def company_register_post():
     return redirect(url_for('company_submission_msg'))
 
 
-@app.route('/company_login')
+@app.route('/company/login')
 def company_login():
     return render_template('company_login.html')
 
-@app.route('/company_login', methods=['POST'])
+@app.route('/company/login', methods=['POST'])
 def company_login_post():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -121,13 +121,13 @@ def company_login_post():
     session['company_id'] = company.id
     return redirect(url_for('company_dashboard'))
 
-@app.route('/company_dashboard')
+@app.route('/company/dashboard')
 @company_auth_required
 def company_dashboard():
     user = Company.query.filter_by(id=session['company_id']).first()
     return render_template('company_dashboard.html', user=user)
 
-@app.route('/company_dashboard', methods=['POST'])
+@app.route('/company/dashboard', methods=['POST'])
 @company_auth_required
 def company_dashboard_post():
     company_name=request.form.get('company_name')
@@ -201,22 +201,41 @@ def company_dashboard_post():
 @app.route('/company/home', methods=['GET'])
 @company_auth_required
 def company_home():
-    user=Company.query.get(session['company_id'])
-    category = request.args.get('category', '')
-    sort = request.args.get('sort', 'latest')
+    user = Company.query.get(session['company_id'])
     
-    if category:
-        campaigns = Campaign.query.filter_by(category=category)
-    else:
-        campaigns = Campaign.query
+    selected_category = request.args.get('category', '')
+    selected_sort = request.args.get('sort', 'latest')
 
-    if sort == 'oldest':
-        campaigns = campaigns.order_by(Campaign.created_at.asc()).all()
+    campaigns_query = Campaign.query.filter_by(visibility='public')  # Only public campaigns
+
+    if selected_category:
+        campaigns_query = campaigns_query.filter_by(category=selected_category)
+
+    if selected_sort == 'oldest':
+        campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()
     else:
-        campaigns = campaigns.order_by(Campaign.created_at.desc()).all()
-    
-    categories = [c.category for c in Campaign.query.distinct(Campaign.category)]
-    return render_template('company_home.html', campaigns=campaigns, categories=categories, selected_category=category, selected_sort=sort,user=user)
+        campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()
+
+    categories = [
+        "Fashion", 
+        "Beauty", 
+        "Fitness and health", 
+        "Travel", 
+        "Food and beverage", 
+        "Lifestyle", 
+        "Finance", 
+        "Automotive", 
+        "Entertainment", 
+        "Education", 
+        "Business", 
+        "Art and design", 
+        "Sports", 
+        "Sustainability and environmental", 
+        "Politics and social issues"
+    ]
+
+    return render_template('company_home.html', campaigns=campaigns, categories=categories, selected_category=selected_category, selected_sort=selected_sort, user=user)
+
 
 
 @app.route('/company/influencer_search', methods=['GET'])
@@ -270,18 +289,12 @@ def influencer_view(influencer_id):
 
 
 
-
-
-
-
-
-
 @app.route('/campaign_created')
 @company_auth_required
 def campaign_created():
     return render_template('campaign_created.html')
 
-@app.route('/company_activity')
+@app.route('/company/activity')
 @company_auth_required
 def company_activity():
     user = Company.query.get(session['company_id'])
@@ -334,7 +347,7 @@ def campaign_add_post():
 
     return redirect(url_for('company_activity'))
 
-@app.route('/campaign/<int:campaign_id>')
+@app.route('/campaign/<int:campaign_id>/view')
 @company_auth_required
 def campaign_view(campaign_id):
     campaign = Campaign.query.get(campaign_id)

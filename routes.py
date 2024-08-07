@@ -13,7 +13,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/user_category')
+@app.route('/user/category')
 def user_category():
     return render_template('user_category.html')
 

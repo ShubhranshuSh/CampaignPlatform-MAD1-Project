@@ -1,19 +1,29 @@
 {% extends 'layout.html' %}
 
+
+{% block title %}
+    IESCP : Influencer Search
+{% endblock %}
+
 {% block styles %}
 <style>
-    body {
-        font-family: Arial, sans-serif;
+    html, body {
+        height: 100%;
         margin: 0;
         padding: 0;
-        height: 100vh;
-        background-color: #f4f6f8;
-        overflow: hidden;
     }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+    }
+
     .container-box {
         display: flex;
         width: 100%;
+        height: 100vh; /* Full viewport height */
     }
+
     a {
         text-decoration: none;
         color: whitesmoke;
@@ -30,7 +40,7 @@
         position: sticky;
         top: 0;
         height: 100vh;
-        overflow: auto;
+        overflow: auto; /* Allow scrolling if needed */
     }
 
     .sidebar .logo {
@@ -67,11 +77,13 @@
         text-align: center;
         padding: 10px;
     }
+
     .profile .name {
         font-size: 16px;
         font-weight: bold;
         color: white;
     }
+
     .profile .category {
         font-size: 14px;
         color: #999;
@@ -93,14 +105,16 @@
         padding: 10px;
         margin-bottom: 20px;
     }
-    .profile a{
+
+    .profile a {
         display: flex;
         align-items: center;
         text-align: center;
         justify-content: center;
         gap: 5px;
     }
-    .profile-name-category{
+
+    .profile-name-category {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -112,7 +126,7 @@
     .main-content {
         flex: 1;
         padding: 20px;
-        overflow-y: auto;
+        overflow-y: auto; /* Ensure scrolling if content overflows */
     }
 
     .main-content h1 {
@@ -277,7 +291,7 @@
     <div class="sidebar">
         <div class="logo">IESCP</div>
         <ul>
-            <li><a href="#">Home</a></li>
+            <li><a href="{{url_for('company_home')}}">Home</a></li>
             <li><a href="{{ url_for('influencer_search') }}">Influencer</a></li>
             <li><a href="{{ url_for('company_activity') }}">Activity</a></li>
             <li><a href="#">Help & Support</a></li>

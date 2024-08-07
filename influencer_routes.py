@@ -30,11 +30,11 @@ def update_message():
     return render_template('update_message.html')
 
 
-@app.route('/influencer_register')
+@app.route('/influencer/register')
 def influencer_register():
     return render_template('influencer_register.html')
 
-@app.route('/influencer_register', methods=['POST'])
+@app.route('/influencer/register', methods=['POST'])
 def influencer_register_post():
     fullname = request.form.get('fullname')
     username = request.form.get('username')
@@ -92,11 +92,11 @@ def influencer_register_post():
 
     return redirect(url_for('influencer_submission_msg'))
 
-@app.route('/influencer_login')
+@app.route('/influencer/login')
 def influencer_login():
     return render_template('influencer_login.html')
 
-@app.route('/influencer_login', methods=['POST'])
+@app.route('/influencer/login', methods=['POST'])
 def influencer_login_post():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -114,13 +114,13 @@ def influencer_login_post():
     session['influencer_id'] = influencer.id
     return redirect(url_for('influencer_dashboard'))
 
-@app.route('/influencer_dashboard')
+@app.route('/influencer/dashboard')
 @influencer_auth_required
 def influencer_dashboard():
     user = Influencer.query.filter_by(id=session['influencer_id']).first()
     return render_template('influencer_dashboard.html', user=user)
 
-@app.route('/influencer_dashboard', methods=['POST'])
+@app.route('/influencer/dashboard', methods=['POST'])
 @influencer_auth_required
 def influencer_dashboard_post():
     name = request.form.get('fullname')
@@ -181,12 +181,47 @@ def influencer_dashboard_post():
     return redirect(url_for('update_message'))
 
 
-# @app.route('/influencer/home')
-# @influencer_auth_required
-# def influencer_home():
-#     user=Influencer.query.filter_by(id=session['influencer_id']).first()
-#     campaign=Campaign.query.all()
-#     return render_template('influencer_home.html',user=user,campaign=campaign)
+@app.route('/influencer/home', methods=['GET'])
+@influencer_auth_required
+def influencer_home():
+    user = Influencer.query.get(session['influencer_id'])
+    
+    selected_category = request.args.get('category', '')
+    selected_sort = request.args.get('sort', 'latest')
+
+    campaigns_query = Campaign.query.filter_by(visibility='public')  # Only public campaigns
+
+    if selected_category:
+        campaigns_query = campaigns_query.filter_by(category=selected_category)
+
+    if selected_sort == 'oldest':
+        campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()  # Fixed the variable name here
+    else:
+        campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()  # Fixed the variable name here
+    
+    categories = [
+        "Fashion", 
+        "Beauty", 
+        "Fitness and health", 
+        "Travel", 
+        "Food and beverage", 
+        "Lifestyle", 
+        "Finance", 
+        "Automotive", 
+        "Entertainment", 
+        "Education", 
+        "Business", 
+        "Art and design", 
+        "Sports", 
+        "Sustainability and environmental", 
+        "Politics and social issues"
+    ]
+
+    return render_template('influencer_home.html', campaigns=campaigns, categories=categories, selected_category=selected_category, selected_sort=selected_sort, user=user)
+
+
+
+
 
 
 @app.route('/influencer_logout')
