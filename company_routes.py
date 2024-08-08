@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 import os
 from werkzeug.utils import secure_filename
 from app import app
-from models import db, Influencer, Company , Campaign
+from models import db, Influencer, Company , Campaign , InterestedCampaigns
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
@@ -420,8 +420,28 @@ def campaign_delete_post(campaign_id):
 @app.route('/company/requests')
 @company_auth_required
 def company_requests():
-    user=Company.query.get(session['company_id'])
-    return render_template('company_requests.html',user=user)
+    user = Company.query.get(session['company_id'])
+    requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).all()
+    return render_template('company_requests.html', user=user, requests=requests)
+
+@app.route('/company/requests/accept/<int:request_id>', methods=['POST'])
+@company_auth_required
+def accept_request(request_id):
+    request = InterestedCampaigns.query.get(request_id)
+    if request:
+        request.status = 'accepted'
+        db.session.commit()
+    return redirect(url_for('company_requests'))
+
+@app.route('/company/requests/reject/<int:request_id>', methods=['POST'])
+@company_auth_required
+def reject_request(request_id):
+    request = InterestedCampaigns.query.get(request_id)
+    if request:
+        request.status = 'rejected'
+        db.session.commit()
+    return redirect(url_for('company_requests'))
+
 
 @app.route('/company_logout')
 @company_auth_required

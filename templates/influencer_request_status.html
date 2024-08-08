@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 
+{% block title %}
+    IESCP : Status Overview
+{% endblock %}
+
 {% block styles %}
     <style>
         body {
@@ -153,20 +157,25 @@
         }
 
         .status-list {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .status-item {
             background-color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            width: calc(100% - 40px); /* Full width minus some padding */
+            max-width: 1000px; /* Max width for larger screens */
         }
 
         .status-item h3 {
             margin: 0;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: #333;
         }
@@ -178,7 +187,7 @@
 
         .status-item .status {
             font-weight: bold;
-            color: #333;
+            font-size: 16px;
         }
 
         .status-item .status.pending {
@@ -218,17 +227,17 @@
         <div class="main-content">
             <h1>Status Overview</h1>
             <div class="tabs">
-                <a href="{{url_for('influencer_requests')}}" class="tab">Request</a>
+                <a href="{{ url_for('influencer_requests') }}" class="tab">Request</a>
                 <a href="#" class="tab active">Status</a>
             </div>
 
             <div class="status-list">
-                {% for request in requests %}
+                {% for interest in interests %}
                 <div class="status-item">
-                    <h3>{{ request.title }}</h3>
-                    <p>{{ request.description }}</p>
-                    <p>Budget: {{ request.budget }}</p>
-                    <p class="status {{ request.status|lower }}">{{ request.status }}</p>
+                    <h3>{{ interest.campaign.title }}</h3>
+                    <p>{{ interest.campaign.description }}</p>
+                    <p>Budget: {{ interest.campaign.budget }}</p>
+                    <p class="status {{ interest.status|lower }}">{{ interest.status }}</p>
                 </div>
                 {% endfor %}
             </div>

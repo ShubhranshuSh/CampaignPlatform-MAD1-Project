@@ -194,6 +194,49 @@
         border-top: 1px solid #e0e0e0;
         margin: 15px 0; /* Spacing around the divider */
     }
+    .request-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .btn {
+        padding: 10px 15px;
+        margin-right: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+    }
+    .btn-success {
+        background-color: #28a745;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+    }
+    .request-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        margin-right: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
 </style>
 {% endblock %}
 
@@ -220,74 +263,23 @@
     </div>
 
     <div class="main-content">
-        <h1>Your Requests</h1>
-        <hr>
-
-        <div class="card">
-            <div class="card-header">
-                Campaign Name 1
-            </div>
-            <div class="card-body">
-                <div class="influencer-info">
-                    <img src="https://via.placeholder.com/100" alt="Influencer Picture">
-                    <div>
-                        <div class="name">Influencer Name 1</div>
-                        <div class="category">Category Name 1</div>
+        <h1>Requests</h1>
+        <div class="request-list">
+            {% if requests %}
+                {% for request in requests %}
+                    <div class="request-item">
+                        <h3>Influencer: {{ request.influencer.name }}</h3>
+                        <p>Campaign: {{ request.campaign.title }}</p>
+                        <p>Status: {{ request.status }}</p>
+                        <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
+                        <a href="{{ url_for('accept_request', request_id=request.id) }}" class="btn btn-success">Accept</a>
+                        <a href="{{ url_for('reject_request', request_id=request.id) }}" class="btn btn-danger">Reject</a>
                     </div>
-                </div>
-                <div class="card-divider"></div>
-                <div class="button-container">
-                    <button class="btn btn-primary">View</button>
-                    <button class="btn btn-success">Approve</button>
-                    <button class="btn btn-danger">Reject</button>
-                </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <p>No requests found.</p>
+            {% endif %}
         </div>
-
-        <div class="card">
-            <div class="card-header">
-                Campaign Name 2
-            </div>
-            <div class="card-body">
-                <div class="influencer-info">
-                    <img src="https://via.placeholder.com/100" alt="Influencer Picture">
-                    <div>
-                        <div class="name">Influencer Name 2</div>
-                        <div class="category">Category Name 2</div>
-                    </div>
-                </div>
-                <div class="card-divider"></div>
-                <div class="button-container">
-                    <button class="btn btn-primary">View</button>
-                    <button class="btn btn-success">Approve</button>
-                    <button class="btn btn-danger">Reject</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                Campaign Name 3
-            </div>
-            <div class="card-body">
-                <div class="influencer-info">
-                    <img src="https://via.placeholder.com/100" alt="Influencer Picture">
-                    <div>
-                        <div class="name">Influencer Name 3</div>
-                        <div class="category">Category Name 3</div>
-                    </div>
-                </div>
-                <div class="card-divider"></div>
-                <div class="button-container">
-                    <button class="btn btn-primary">View</button>
-                    <button class="btn btn-success">Approve</button>
-                    <button class="btn btn-danger">Reject</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add more cards as needed -->
-
     </div>
 </div>
 {% endblock %}

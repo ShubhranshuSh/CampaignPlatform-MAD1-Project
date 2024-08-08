@@ -1,10 +1,12 @@
 from app import app
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from pytz import timezone
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Admin(db.Model):
     __tablename__ = 'admin'
@@ -77,9 +79,12 @@ class InterestedCampaigns(db.Model):
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
     campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
     expressed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    status = db.Column(db.String(50), nullable=False, default='pending')  # Status field added
 
     influencer = db.relationship('Influencer', backref=db.backref('interested_campaigns', lazy=True))
     campaign = db.relationship('Campaign', backref=db.backref('interested_influencers', lazy=True))
+
+
 
 with app.app_context():
     db.create_all()

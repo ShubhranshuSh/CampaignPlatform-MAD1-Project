@@ -230,15 +230,31 @@ def campaign_detail(campaign_id):
 @app.route('/campaign/requests')
 @influencer_auth_required
 def influencer_requests():
-    user=Influencer.query.get(session['influencer_id'])
+    user = Influencer.query.get(session['influencer_id'])
+    # You can retrieve the user's campaign requests here if needed
     return render_template('influencer_requests.html', user=user)
-
 
 @app.route('/influencer/campaign/request_status')
 @influencer_auth_required
 def request_status():
-    user=Influencer.query.get(session['influencer_id'])
-    return render_template('influencer_request_status.html', user=user)
+    user = Influencer.query.get(session['influencer_id'])
+    # Fetching interested campaigns and their statuses for the user
+    interests = InterestedCampaigns.query.filter_by(influencer_id=user.id).all()
+    return render_template('influencer_request_status.html', user=user, interests=interests)
+
+@app.route('/express_interest/<int:campaign_id>', methods=['POST'])
+@influencer_auth_required
+def express_interest(campaign_id):
+    user_id = session['influencer_id']
+    # Check if the influencer already expressed interest
+    existing_interest = InterestedCampaigns.query.filter_by(influencer_id=user_id, campaign_id=campaign_id).first()
+    if not existing_interest:
+        # Create new interest record
+        interest = InterestedCampaigns(influencer_id=user_id, campaign_id=campaign_id)
+        db.session.add(interest)
+        db.session.commit()
+    return redirect(url_for('request_status'))
+
 
 
 

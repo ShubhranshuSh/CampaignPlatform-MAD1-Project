@@ -248,7 +248,9 @@
                     <input type="text" id="visibility" name="visibility" value="{{ campaign.visibility }}" readonly>
                 </div>
             </div>
-            <button class="interested-button btn btn-primary"><a href="url_for('interested_campaign')">Interested</a></button>
+            <form method="POST" action="{{ url_for('express_interest', campaign_id=campaign.id) }}">
+                <button class="interested-button btn btn-primary" type="submit">Interested</button>
+            </form>
         </div>
     </div>
 {% endblock %}
