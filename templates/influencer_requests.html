@@ -1,0 +1,186 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f4f6f8;
+            overflow: hidden;
+        }
+
+        .container-box {
+            display: flex;
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .sidebar ul li {
+            width: 100%;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .profile-name-category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            padding-top: 13px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-content h1 {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Lexend Deca', sans-serif;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            border: none;
+            background-color: transparent;
+        }
+
+        .tab:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid #333;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+            <ul>
+                <li><a href="{{url_for('influencer_home')}}">Home</a></li>
+                <li><a href="{{url_for('influencer_requests')}}">Requests</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{url_for('influencer_dashboard')}}">
+                    <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                    <div class="profile-name-category">
+                        <span class="name">{{user.name}}</span>
+                        <span class="category">Influencer</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1>Your Request</h1>
+            <div class="tabs">
+                <a href="#" class="tab active">Request</a>
+                <a href="{{url_for('request_status')}}" class="tab">Status</a>
+            </div>
+            <!-- Content for the selected tab goes here -->
+        </div>
+    </div>
+{% endblock %}

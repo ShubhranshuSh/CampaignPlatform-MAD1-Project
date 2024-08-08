@@ -227,7 +227,18 @@ def campaign_detail(campaign_id):
     user = Influencer.query.get(session['influencer_id'])
     return render_template('influencer_campaign_view.html', campaign=campaign, user=user)
 
+@app.route('/campaign/requests')
+@influencer_auth_required
+def influencer_requests():
+    user=Influencer.query.get(session['influencer_id'])
+    return render_template('influencer_requests.html', user=user)
 
+
+@app.route('/influencer/campaign/request_status')
+@influencer_auth_required
+def request_status():
+    user=Influencer.query.get(session['influencer_id'])
+    return render_template('influencer_request_status.html', user=user)
 
 
 
