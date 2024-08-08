@@ -227,8 +227,6 @@
             cursor: not-allowed;
         }
         
-        
-
     </style>
 {% endblock %}
 
@@ -294,7 +292,7 @@
                         </div>
                         <div class="detail-item">
                             <label for="category">Category</label>
-                            <select id="category" name="category" onchange="toggleOtherCategoryInput()">
+                            <select id="category" name="category">
                                 <option value="Fashion" {% if user.category == 'Fashion' %}selected{% endif %}>Fashion</option>
                                 <option value="Beauty" {% if user.category == 'Beauty' %}selected{% endif %}>Beauty</option>
                                 <option value="Fitness and health" {% if user.category == 'Fitness and health' %}selected{% endif %}>Fitness and health</option>
@@ -310,57 +308,16 @@
                                 <option value="Sports" {% if user.category == 'Sports' %}selected{% endif %}>Sports</option>
                                 <option value="Sustainability and environmental" {% if user.category == 'Sustainability and environmental' %}selected{% endif %}>Sustainability and environmental</option>
                                 <option value="Politics and social issues" {% if user.category == 'Politics and social issues' %}selected{% endif %}>Politics and social issues</option>
-                                <option value="Other" {% if user.category not in ['Fashion', 'Beauty', 'Fitness and health', 'Travel', 'Food and beverage', 'Lifestyle', 'Finance', 'Automotive', 'Entertainment', 'Education', 'Business', 'Art and design', 'Sports', 'Sustainability and environmental', 'Politics and social issues'] %}selected{% endif %}>Other</option>
                             </select>
-                            {% if user.category not in ['Fashion', 'Beauty', 'Fitness and health', 'Travel', 'Food and beverage', 'Lifestyle', 'Finance', 'Automotive', 'Entertainment', 'Education', 'Business', 'Art and design', 'Sports', 'Sustainability and environmental', 'Politics and social issues'] %}
-                                <input type="text" id="other_category" name="other_category" value="{{ user.category }}">
-                            {% else %}
-                                <input type="text" id="other_category" name="other_category" class="hidden">
-                            {% endif %}
-                        </div>
-                        
-                        <div class="detail-item">
-                            <label for="interest">Interest</label>
-                            <input type="text" id="interest" name="interest" value="{{ user.interest }}">
-                        </div>
-                        <div class="detail-item">
-                            <label for="reach">Reach</label>
-                            <input type="text" id="reach" name="reach" value="{{ user.reach }}">
-                        </div>
-                        <div class="detail-item">
-                            <label for="social_media">Social Media Link</label>
-                            <input type="text" id="social_media" name="social_media" value="{{ user.social_media_links }}">
                         </div>
                         <div class="detail-item">
                             <label for="bio">Bio</label>
                             <textarea id="bio" name="bio">{{ user.bio }}</textarea>
                         </div>
-                        <div class="detail-item" style="grid-column: span 2; text-align: right;">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
                     </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
-
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        function toggleOtherCategoryInput() {
-            var categorySelect = document.getElementById("category");
-            var otherCategoryInput = document.getElementById("other_category");
-            if (categorySelect.value === "Other") {
-                otherCategoryInput.classList.remove("hidden");
-            } else {
-                otherCategoryInput.classList.add("hidden");
-            }
-        }
-
-        // Initialize the other category input visibility
-        window.onload = function() {
-            toggleOtherCategoryInput();
-        }
-    </script>
 {% endblock %}
