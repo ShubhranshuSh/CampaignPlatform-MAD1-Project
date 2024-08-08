@@ -1,6 +1,5 @@
 {% extends 'layout.html' %}
 
-
 {% block title %}
     IESCP : Influencer Campaign View
 {% endblock %}
@@ -8,16 +7,15 @@
 {% block styles %}
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
             background-color: #f4f6f8;
-            overflow: hidden;
         }
         .container-box {
             display: flex;
             width: 100%;
+            min-height: 100vh;
         }
         a {
             text-decoration: none;
@@ -32,9 +30,9 @@
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
-            position: sticky;
+            position: fixed;
             top: 0;
-            height: 100vh;
+            bottom: 0;
             overflow: auto;
         }
         
@@ -80,7 +78,7 @@
         .profile .category {
             font-size: 14px;
             color: #999;
-            margin-top: 5px; /* Adjust this value to reduce the gap */
+            margin-top: 5px;
         }
 
         .sidebar .profile img {
@@ -98,14 +96,14 @@
             padding: 10px;
             margin-bottom: 20px;
         }
-        .profile a{
+        .profile a {
             display: flex;
             align-items: center;
             text-align: center;
             justify-content: center;
             gap: 5px;
         }
-        .profile-name-category{
+        .profile-name-category {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -113,65 +111,50 @@
             justify-content: center;
             padding-top: 13px;
         }
-        .container .activity-heading {
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px; /* Same as the sidebar width */
+            padding: 20px;
+        }
+
+        .activity-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .container .activity-heading h1 {
-            font-size: 60px;
+        .activity-heading h1 {
+            font-size: 36px;
             font-weight: bold;
             font-family: 'Lexend Deca', sans-serif;
             font-weight: 600;
-        }
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #333;
-            border: none;
-            background-color: transparent;
-        }
-        
-        .tab:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .tab.active {
-            border-bottom: 2px solid #333;
         }
 
         .profile-details {
             padding: 20px;
         }
-        
+
         .profile-details h2 {
             margin-top: 0;
         }
-        
+
         .details-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
-        
+
         .detail-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         .detail-item label {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .detail-item input,
         .detail-item textarea,
         .detail-item select {
@@ -182,19 +165,19 @@
             width: 100%;
             cursor: not-allowed;
         }
-        
+
         .detail-item textarea {
             resize: none;
             height: 100px;
         }
-        
+
         .hidden {
             display: none;
         }
 
         .interested-button {
             display: block;
-            width: 200px;
+            width: 100%;
             padding: 10px 20px;
             margin: 20px auto 0;
             color: white;
@@ -212,8 +195,8 @@
         <div class="sidebar">
             <div class="logo">IESCP</div>
             <ul>
-                <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
-                <li><a href="#">Influencer</a></li>
+                <li><a href="{{url_for('influencer_home')}}">Home</a></li>
+                <li><a href="#">Requests</a></li>
                 <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
@@ -226,7 +209,7 @@
                 </a>
             </div>
         </div>
-        <div class="container">
+        <div class="main-content">
             <div class="activity-heading">
                 <h1>Detailed View</h1>
                 <a href="{{ url_for('influencer_home') }}" class="btn btn-primary">Back To Home</a>
