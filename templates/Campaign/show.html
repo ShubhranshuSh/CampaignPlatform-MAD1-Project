@@ -217,7 +217,7 @@
             </div>
             <div class="tabs">
                 <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" class="tab active">Details</a>
-                <a href="{{ url_for('company_cast') }}" class="tab">Cast</a>
+                <a href="{{ url_for('company_cast',campaign_id=campaign.id) }}" class="tab">Cast</a>
             </div>
             
             <div class="details-grid">

@@ -466,13 +466,20 @@ def reject_request(request_id):
     return jsonify({'status': 'error', 'message': 'Request not found'})
 
 
-@app.route('/company/campaign/cast')
+@app.route('/campaign/<int:campaign_id>/cast')
 @company_auth_required
-def company_cast():
+def company_cast(campaign_id):
     user = Company.query.get(session['company_id'])
-    campaigns = Campaign.query.filter_by(company_id=user.id).all()
-    influencer=request.args.get('influencer')
-    return render_template('company_cast.html', user=user, campaigns=campaigns, influencer=influencer)
+    campaigns = Campaign.query.filter_by(id=campaign_id).first()
+    # influencers=request.args.get('influencer')
+    print(campaigns.influencers)
+    return render_template('company_cast.html', user=user, campaign=campaigns)
+
+    
+
+
+
+
 
 
 

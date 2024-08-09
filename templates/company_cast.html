@@ -227,27 +227,22 @@
     <div class="main-content">
         <h1>The Cast</h1>
         <div class="tabs">
-            {% if campaigns %}
-                <a href="{{ url_for('campaign_view', campaign_id=campaigns[0].id) }}" class="tab {% if request.endpoint == 'campaign_view' %}active{% endif %}">Details</a>
-            {% else %}
-                <a href="#" class="tab active">Details</a> <!-- Or handle the case when there are no campaigns -->
-            {% endif %}
-            <a href="{{ url_for('company_cast') }}" class="tab {% if request.endpoint == 'company_cast' %}active{% endif %}">Cast</a>
+            
+            <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" class="tab">Details</a>
+            
+                
+            
+            <a href="{{ url_for('company_cast',campaign_id=campaign.id) }}" class="tab active">Cast</a>
         </div>
         
         <div class="card-container">
-            {% if campaigns %}
-                {% for campaign in campaigns %}
+            {% if campaign.influencers %}
+                {% for influencer in campaign.influencers %}
                 <div class="card">
                     <img src="https://via.placeholder.com/100" alt="Campaign Image">
                     <div class="name">{{ influencer.name }}</div>
                     <div class="category">{{ influencer.category }}</div>
                     <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}" class="btn-primary">View Details</a>
-                    <ul>
-                        {% for influencer in campaign.influencers %}
-                            <li>{{ influencer.name }}</li>
-                        {% endfor %}
-                    </ul>
                 </div>
                 {% endfor %}
             {% else %}
