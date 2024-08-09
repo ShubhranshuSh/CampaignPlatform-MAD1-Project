@@ -350,8 +350,8 @@ def campaign_add_post():
 @app.route('/campaign/<int:campaign_id>/view')
 @company_auth_required
 def campaign_view(campaign_id):
-    campaign = Campaign.query.get(campaign_id)
-    user = Company.query.get(session['company_id'])
+    campaign = Campaign.query.get_or_404(campaign_id)  # Use get_or_404 to handle cases where the campaign is not found
+    user = Company.query.get_or_404(session['company_id'])  # Use get_or_404 to handle cases where the company is not found
     return render_template('Campaign/show.html', campaign=campaign, user=user)
 
 @app.route('/campaign/<int:campaign_id>/edit')
@@ -422,7 +422,17 @@ def campaign_delete_post(campaign_id):
 def company_requests():
     user = Company.query.get(session['company_id'])
     requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).all()
-    return render_template('company_requests.html', user=user, requests=requests)
+    
+    # Separate requests by status
+    pending_requests = [req for req in requests if req.status == 'pending']
+    accepted_requests = [req for req in requests if req.status == 'accepted']
+    rejected_requests = [req for req in requests if req.status == 'rejected']
+    
+    return render_template('company_requests.html', user=user, 
+                           pending_requests=pending_requests,
+                           accepted_requests=accepted_requests,
+                           rejected_requests=rejected_requests)
+
 
 @app.route('/company/requests/accept/<int:request_id>', methods=['POST'])
 @company_auth_required
@@ -431,7 +441,15 @@ def accept_request(request_id):
     if request:
         request.status = 'accepted'
         db.session.commit()
-    return redirect(url_for('company_requests'))
+
+        # Optionally, you can also update the Campaign table if needed
+        # campaign = Campaign.query.get(request.campaign_id)
+        # if campaign:
+        #     db.session.add(campaign)
+        #     db.session.commit()
+
+    return jsonify({'status': 'success', 'request_id': request_id})
+
 
 @app.route('/company/requests/reject/<int:request_id>', methods=['POST'])
 @company_auth_required
@@ -440,7 +458,16 @@ def reject_request(request_id):
     if request:
         request.status = 'rejected'
         db.session.commit()
-    return redirect(url_for('company_requests'))
+
+    return jsonify({'status': 'success', 'request_id': request_id})
+
+
+@app.route('/company/campaign/cast')
+@company_auth_required
+def company_cast():
+    user = Company.query.get(session['company_id'])
+    campaign = Campaign.query.filter_by(company_id=user.id).all()
+    return render_template('company_cast.html', user=user, campaign=campaign)
 
 
 @app.route('/company_logout')

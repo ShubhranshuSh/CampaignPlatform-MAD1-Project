@@ -76,13 +76,30 @@ class Campaign(db.Model):
 class InterestedCampaigns(db.Model):
     __tablename__ = 'interested_campaigns'
     id = db.Column(db.Integer, primary_key=True)
-    influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
-    campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
+
+    influencer_id = db.Column(
+        db.Integer,
+        db.ForeignKey('influencers.id', name='fk_influencer_id'),
+        nullable=False
+    )
+    campaign_id = db.Column(
+        db.Integer,
+        db.ForeignKey('campaign.id', name='fk_campaign_id'),
+        nullable=False
+    )
+    company_id = db.Column(
+        db.Integer,
+        db.ForeignKey('company.id', name='fk_company_id'),
+        nullable=False
+    )
+
     expressed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(50), nullable=False, default='pending')  # Status field added
+    status = db.Column(db.String(50), nullable=False, default='pending')
 
     influencer = db.relationship('Influencer', backref=db.backref('interested_campaigns', lazy=True))
     campaign = db.relationship('Campaign', backref=db.backref('interested_influencers', lazy=True))
+    company = db.relationship('Company', backref=db.backref('company_interests', lazy=True))
+
 
 
 

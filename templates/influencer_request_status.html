@@ -194,7 +194,7 @@
             color: #ff9800;
         }
 
-        .status-item .status.approved {
+        .status-item .status.accepted {
             color: #4caf50;
         }
 
@@ -209,15 +209,15 @@
         <div class="sidebar">
             <div class="logo">IESCP</div>
             <ul>
-                <li><a href="{{url_for('influencer_home')}}">Home</a></li>
-                <li><a href="{{url_for('influencer_requests')}}">Requests</a></li>
+                <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
+                <li><a href="{{ url_for('influencer_requests') }}">Requests</a></li>
                 <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
-                <a href="{{url_for('influencer_dashboard')}}">
+                <a href="{{ url_for('influencer_dashboard') }}">
                     <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
                     <div class="profile-name-category">
-                        <span class="name">{{user.name}}</span>
+                        <span class="name">{{ user.name }}</span>
                         <span class="category">Influencer</span>
                     </div>
                 </a>

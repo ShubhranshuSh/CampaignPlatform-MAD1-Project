@@ -1,0 +1,226 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    IESCP: Company Cast
+{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: #f4f6f8;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-box {
+        display: flex;
+        flex: 1;
+        height: 100%;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #28282B;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .sidebar .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        font-family: 'Lexend Deca', sans-serif;
+        font-weight: 600;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    .sidebar ul li {
+        width: 100%;
+    }
+
+    .sidebar ul li a {
+        display: block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar .profile {
+        margin-top: auto;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .profile .name {
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .profile .category {
+        font-size: 14px;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    .sidebar .profile img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-bottom: 5px;
+    }
+
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .profile a {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .profile-name-category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        padding-top: 13px;
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .main-content h1 {
+        font-size: 36px;
+        font-weight: bold;
+        font-family: 'Lexend Deca', sans-serif;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        text-align: center;
+    }
+
+    .card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .card .name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .card .category {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 14px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-box">
+    <div class="sidebar">
+        <div class="logo">IESCP</div>
+        <ul>
+            <li><a href="{{ url_for('company_home') }}">Home</a></li>
+            <li><a href="{{ url_for('influencer_search') }}">Influencer</a></li>
+            <li><a href="{{ url_for('company_activity') }}">Activity</a></li>
+            <li><a href="{{ url_for('company_requests') }}">Requests</a></li>
+            <li><a href="#">Help & Support</a></li>
+        </ul>
+        <div class="profile">
+            <a href="{{ url_for('company_dashboard') }}">
+                <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
+                <div class="profile-name-category">
+                    <span class="company_name">{{ user.company_name }}</span>
+                    <span class="category">Company</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>The Cast</h1>
+        <hr>
+        <div class="card-container">
+            {% if campaigns %}
+                {% for campaign in campaigns %}
+                    <div class="card">
+                        <img src="https://via.placeholder.com/100" alt="Campaign Image">
+                        <div class="name">{{ campaign.title }}</div>
+                        <div class="category">{{ campaign.category }}</div>
+                        <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}" class="btn-primary">View Details</a>
+
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No campaigns found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

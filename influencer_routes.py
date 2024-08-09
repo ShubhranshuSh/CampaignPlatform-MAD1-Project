@@ -223,37 +223,56 @@ def influencer_home():
 @app.route('/campaign/<int:campaign_id>')
 @influencer_auth_required
 def campaign_detail(campaign_id):
-    campaign = Campaign.query.get_or_404(campaign_id)
+    campaign = Campaign.query.get(campaign_id)
+    if not campaign:
+        flash('Campaign not found!', 'error')
+        return redirect(url_for('influencer_home'))  # Redirect to a safe page
     user = Influencer.query.get(session['influencer_id'])
     return render_template('influencer_campaign_view.html', campaign=campaign, user=user)
+
 
 @app.route('/campaign/requests')
 @influencer_auth_required
 def influencer_requests():
     user = Influencer.query.get(session['influencer_id'])
-    # You can retrieve the user's campaign requests here if needed
+    if not user:
+        flash('User not found!', 'error')
+        return redirect(url_for('login'))  # Redirect to login or another page
     return render_template('influencer_requests.html', user=user)
+
 
 @app.route('/influencer/campaign/request_status')
 @influencer_auth_required
 def request_status():
     user = Influencer.query.get(session['influencer_id'])
-    # Fetching interested campaigns and their statuses for the user
     interests = InterestedCampaigns.query.filter_by(influencer_id=user.id).all()
     return render_template('influencer_request_status.html', user=user, interests=interests)
+
 
 @app.route('/express_interest/<int:campaign_id>', methods=['POST'])
 @influencer_auth_required
 def express_interest(campaign_id):
     user_id = session['influencer_id']
-    # Check if the influencer already expressed interest
-    existing_interest = InterestedCampaigns.query.filter_by(influencer_id=user_id, campaign_id=campaign_id).first()
+    campaign = Campaign.query.get_or_404(campaign_id)
+    company_id = campaign.company_id
+
+    existing_interest = InterestedCampaigns.query.filter_by(
+        influencer_id=user_id,
+        campaign_id=campaign_id
+    ).first()
+
     if not existing_interest:
-        # Create new interest record
-        interest = InterestedCampaigns(influencer_id=user_id, campaign_id=campaign_id)
+        interest = InterestedCampaigns(
+            influencer_id=user_id,
+            campaign_id=campaign_id,
+            company_id=company_id,
+            status='pending'
+        )
         db.session.add(interest)
         db.session.commit()
+
     return redirect(url_for('request_status'))
+
 
 
 
