@@ -421,6 +421,8 @@ def campaign_delete_post(campaign_id):
 @company_auth_required
 def company_requests():
     user = Company.query.get(session['company_id'])
+    
+    # Fetch requests related to this company
     requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).all()
     
     # Separate requests by status
@@ -434,6 +436,7 @@ def company_requests():
                            rejected_requests=rejected_requests)
 
 
+
 @app.route('/company/requests/accept/<int:request_id>', methods=['POST'])
 @company_auth_required
 def accept_request(request_id):
@@ -441,14 +444,17 @@ def accept_request(request_id):
     if request:
         request.status = 'accepted'
         db.session.commit()
-
+        
         # Optionally, you can also update the Campaign table if needed
         # campaign = Campaign.query.get(request.campaign_id)
         # if campaign:
         #     db.session.add(campaign)
         #     db.session.commit()
 
-    return jsonify({'status': 'success', 'request_id': request_id})
+        # Redirect to the company_cast page to reflect the changes
+        return redirect(url_for('company_cast'))
+    
+    return jsonify({'status': 'error', 'message': 'Request not found'})
 
 
 @app.route('/company/requests/reject/<int:request_id>', methods=['POST'])
@@ -456,10 +462,13 @@ def accept_request(request_id):
 def reject_request(request_id):
     request = InterestedCampaigns.query.get(request_id)
     if request:
-        request.status = 'rejected'
+        db.session.delete(request)
         db.session.commit()
 
-    return jsonify({'status': 'success', 'request_id': request_id})
+        # Redirect back to the requests page
+        return redirect(url_for('company_requests'))
+    
+    return jsonify({'status': 'error', 'message': 'Request not found'})
 
 
 @app.route('/company/campaign/cast')
@@ -469,6 +478,7 @@ def company_cast():
     campaigns = Campaign.query.filter_by(company_id=user.id).all()
     influencer=request.args.get('influencer')
     return render_template('company_cast.html', user=user, campaigns=campaigns, influencer=influencer)
+
 
 
 

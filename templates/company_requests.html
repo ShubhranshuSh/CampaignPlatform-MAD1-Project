@@ -186,22 +186,26 @@
     <div class="main-content">
         <h1>Requests</h1>
         <div class="tabs">
-            <a href="#" class="tab active">Request</a>
-            <a href="#" class="tab">Status</a>
+            <a href="#" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %}active{% endif %}">Request</a>
+            <a href="#" class="tab {% if request.endpoint == 'company_requests' and 'status' in request.args.values() %}active{% endif %}">Status</a>
         </div>
         <div id="tab-content">
             <!-- Request Tab Content -->
             <div id="request-tab-content">
                 <div class="request-list">
-                    {% if requests %}
-                        {% for request in requests %}
+                    {% if pending_requests %}
+                        {% for request in pending_requests %}
                             <div class="request-item">
                                 <h3>Influencer: {{ request.influencer.name }}</h3>
                                 <p>Campaign: {{ request.campaign.title }}</p>
                                 <p>Status: {{ request.status }}</p>
                                 <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
-                                <a href="{{ url_for('accept_request', request_id=request.id) }}" class="btn btn-success">Accept</a>
-                                <a href="{{ url_for('reject_request', request_id=request.id) }}" class="btn btn-danger">Reject</a>
+                                <form action="{{ url_for('accept_request', request_id=request.id) }}" method="post">
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                                <form action="{{ url_for('reject_request', request_id=request.id) }}" method="post">
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
                             </div>
                         {% endfor %}
                     {% else %}
@@ -209,9 +213,35 @@
                     {% endif %}
                 </div>
             </div>
-            <!-- Status Tab Content (Blank for now) -->
+            <!-- Status Tab Content -->
             <div id="status-tab-content" style="display: none;">
-                <!-- Status content will be added here later -->
+                <div class="request-list">
+                    {% if accepted_requests %}
+                        {% for request in accepted_requests %}
+                            <div class="request-item">
+                                <h3>Influencer: {{ request.influencer.name }}</h3>
+                                <p>Campaign: {{ request.campaign.title }}</p>
+                                <p>Status: {{ request.status }}</p>
+                                <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No accepted requests found.</p>
+                    {% endif %}
+                    
+                    {% if rejected_requests %}
+                        {% for request in rejected_requests %}
+                            <div class="request-item">
+                                <h3>Influencer: {{ request.influencer.name }}</h3>
+                                <p>Campaign: {{ request.campaign.title }}</p>
+                                <p>Status: {{ request.status }}</p>
+                                <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No rejected requests found.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
