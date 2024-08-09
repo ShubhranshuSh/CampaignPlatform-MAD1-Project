@@ -187,7 +187,7 @@
         <h1>Requests</h1>
         <div class="tabs">
             <a href="#" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %}active{% endif %}">Request</a>
-            <a href="#" class="tab {% if request.endpoint == 'company_requests' and 'status' in request.args.values() %}active{% endif %}">Status</a>
+            <a href="#" class="tab">Status</a>
         </div>
         <div id="tab-content">
             <!-- Request Tab Content -->
@@ -215,34 +215,9 @@
             </div>
             <!-- Status Tab Content -->
             <div id="status-tab-content" style="display: none;">
-                <div class="request-list">
-                    {% if accepted_requests %}
-                        {% for request in accepted_requests %}
-                            <div class="request-item">
-                                <h3>Influencer: {{ request.influencer.name }}</h3>
-                                <p>Campaign: {{ request.campaign.title }}</p>
-                                <p>Status: {{ request.status }}</p>
-                                <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>No accepted requests found.</p>
-                    {% endif %}
-                    
-                    {% if rejected_requests %}
-                        {% for request in rejected_requests %}
-                            <div class="request-item">
-                                <h3>Influencer: {{ request.influencer.name }}</h3>
-                                <p>Campaign: {{ request.campaign.title }}</p>
-                                <p>Status: {{ request.status }}</p>
-                                <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>No rejected requests found.</p>
-                    {% endif %}
-                </div>
+                <p>This section is under construction.</p>
             </div>
+
         </div>
     </div>
 </div>

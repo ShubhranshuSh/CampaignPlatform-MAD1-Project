@@ -444,17 +444,12 @@ def accept_request(request_id):
     if request:
         request.status = 'accepted'
         db.session.commit()
-        
-        # Optionally, you can also update the Campaign table if needed
-        # campaign = Campaign.query.get(request.campaign_id)
-        # if campaign:
-        #     db.session.add(campaign)
-        #     db.session.commit()
 
         # Redirect to the company_cast page to reflect the changes
         return redirect(url_for('company_cast'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
+
 
 
 @app.route('/company/requests/reject/<int:request_id>', methods=['POST'])
@@ -478,6 +473,12 @@ def company_cast():
     campaigns = Campaign.query.filter_by(company_id=user.id).all()
     influencer=request.args.get('influencer')
     return render_template('company_cast.html', user=user, campaigns=campaigns, influencer=influencer)
+
+
+
+
+
+
 
 
 
