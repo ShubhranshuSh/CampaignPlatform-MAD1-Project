@@ -12,16 +12,17 @@
         padding: 0;
         height: 100vh;
         background-color: #f4f6f8;
-        display: flex;
-        flex-direction: column;
+        overflow: hidden;
     }
-
     .container-box {
         display: flex;
-        flex: 1;
-        height: 100%;
+        width: 100%;
     }
-
+    a {
+        text-decoration: none;
+        color: whitesmoke;
+    }
+    
     .sidebar {
         width: 250px;
         background-color: #28282B;
@@ -33,9 +34,9 @@
         position: sticky;
         top: 0;
         height: 100vh;
-        overflow-y: auto;
+        overflow: auto;
     }
-
+    
     .sidebar .logo {
         font-size: 24px;
         font-weight: bold;
@@ -43,44 +44,42 @@
         font-family: 'Lexend Deca', sans-serif;
         font-weight: 600;
     }
-
+    
     .sidebar ul {
         list-style-type: none;
         padding: 0;
         width: 100%;
     }
-
+    
     .sidebar ul li {
         width: 100%;
     }
-
+    
     .sidebar ul li a {
         display: block;
         padding: 10px 20px;
         color: white;
         text-decoration: none;
     }
-
+    
     .sidebar ul li a:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0,0,0,0.1);
     }
-
+    
     .sidebar .profile {
         margin-top: auto;
         text-align: center;
         padding: 10px;
     }
-
     .profile .name {
         font-size: 16px;
         font-weight: bold;
         color: white;
     }
-
     .profile .category {
         font-size: 14px;
         color: #999;
-        margin-top: 5px;
+        margin-top: 5px; /* Adjust this value to reduce the gap */
     }
 
     .sidebar .profile img {
@@ -98,16 +97,14 @@
         padding: 10px;
         margin-bottom: 20px;
     }
-
-    .profile a {
+    .profile a{
         display: flex;
         align-items: center;
         text-align: center;
         justify-content: center;
         gap: 5px;
     }
-
-    .profile-name-category {
+    .profile-name-category{
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -128,6 +125,30 @@
         font-family: 'Lexend Deca', sans-serif;
         color: #333;
         margin-bottom: 20px;
+    }
+
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+    
+    .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #333;
+        border: none;
+        background-color: transparent;
+        text-decoration: none;
+    }
+    
+    .tab:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .tab.active {
+        border-bottom: 2px solid #333;
     }
 
     .card-container {
@@ -186,10 +207,10 @@
     <div class="sidebar">
         <div class="logo">IESCP</div>
         <ul>
-            <li><a href="{{ url_for('company_home') }}">Home</a></li>
-            <li><a href="{{ url_for('influencer_search') }}">Influencer</a></li>
-            <li><a href="{{ url_for('company_activity') }}">Activity</a></li>
-            <li><a href="{{ url_for('company_requests') }}">Requests</a></li>
+            <li><a href="{{url_for('company_home')}}">Home</a></li>
+            <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
+            <li><a href="{{url_for('company_activity')}}">Activity</a></li>
+            <li><a href="#">Requests</a></li>
             <li><a href="#">Help & Support</a></li>
         </ul>
         <div class="profile">
@@ -205,22 +226,35 @@
 
     <div class="main-content">
         <h1>The Cast</h1>
-        <hr>
+        <div class="tabs">
+            {% if campaigns %}
+                <a href="{{ url_for('campaign_view', campaign_id=campaigns[0].id) }}" class="tab {% if request.endpoint == 'campaign_view' %}active{% endif %}">Details</a>
+            {% else %}
+                <a href="#" class="tab active">Details</a> <!-- Or handle the case when there are no campaigns -->
+            {% endif %}
+            <a href="{{ url_for('company_cast') }}" class="tab {% if request.endpoint == 'company_cast' %}active{% endif %}">Cast</a>
+        </div>
+        
         <div class="card-container">
             {% if campaigns %}
                 {% for campaign in campaigns %}
-                    <div class="card">
-                        <img src="https://via.placeholder.com/100" alt="Campaign Image">
-                        <div class="name">{{ campaign.title }}</div>
-                        <div class="category">{{ campaign.category }}</div>
-                        <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}" class="btn-primary">View Details</a>
-
-                    </div>
+                <div class="card">
+                    <img src="https://via.placeholder.com/100" alt="Campaign Image">
+                    <div class="name">{{ influencer.name }}</div>
+                    <div class="category">{{ influencer.category }}</div>
+                    <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}" class="btn-primary">View Details</a>
+                    <ul>
+                        {% for influencer in campaign.influencers %}
+                            <li>{{ influencer.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endfor %}
             {% else %}
                 <p>No campaigns found.</p>
             {% endif %}
         </div>
+        
     </div>
 </div>
 {% endblock %}

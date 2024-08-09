@@ -466,8 +466,11 @@ def reject_request(request_id):
 @company_auth_required
 def company_cast():
     user = Company.query.get(session['company_id'])
-    campaign = Campaign.query.filter_by(company_id=user.id).all()
-    return render_template('company_cast.html', user=user, campaign=campaign)
+    campaigns = Campaign.query.filter_by(company_id=user.id).all()
+    influencer=request.args.get('influencer')
+    return render_template('company_cast.html', user=user, campaigns=campaigns, influencer=influencer)
+
+
 
 
 @app.route('/company_logout')
