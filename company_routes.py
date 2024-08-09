@@ -462,7 +462,7 @@ def accept_request(request_id):
 def reject_request(request_id):
     request = InterestedCampaigns.query.get(request_id)
     if request:
-        db.session.delete(request)
+        request.status = 'rejected'  # Update status instead of deleting
         db.session.commit()
 
         # Redirect back to the requests page
