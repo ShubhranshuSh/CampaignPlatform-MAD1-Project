@@ -15,18 +15,18 @@
         display: flex;
         flex-direction: column;
     }
-    
+
     .container-box {
         display: flex;
         flex: 1;
         height: 100%;
     }
-    
+
     a {
         text-decoration: none;
         color: whitesmoke;
     }
-    
+
     .sidebar {
         width: 250px;
         background-color: #28282B;
@@ -40,7 +40,7 @@
         height: 100vh;
         overflow-y: auto;
     }
-    
+
     .sidebar .logo {
         font-size: 24px;
         font-weight: bold;
@@ -48,53 +48,53 @@
         font-family: 'Lexend Deca', sans-serif;
         font-weight: 600;
     }
-    
+
     .sidebar ul {
         list-style-type: none;
         padding: 0;
         width: 100%;
     }
-    
+
     .sidebar ul li {
         width: 100%;
     }
-    
+
     .sidebar ul li a {
         display: block;
         padding: 10px 20px;
         color: white;
         text-decoration: none;
     }
-    
+
     .sidebar ul li a:hover {
         background-color: rgba(0,0,0,0.1);
     }
-    
+
     .sidebar .profile {
         margin-top: auto;
         text-align: center;
         padding: 10px;
     }
-    
+
     .profile .name {
         font-size: 16px;
         font-weight: bold;
         color: white;
     }
-    
+
     .profile .category {
         font-size: 14px;
         color: #999;
         margin-top: 5px;
     }
-    
+
     .sidebar .profile img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         margin-bottom: 5px;
     }
-    
+
     .profile {
         display: flex;
         flex-direction: column;
@@ -103,7 +103,7 @@
         padding: 10px;
         margin-bottom: 20px;
     }
-    
+
     .profile a {
         display: flex;
         align-items: center;
@@ -111,7 +111,7 @@
         justify-content: center;
         gap: 5px;
     }
-    
+
     .profile-name-category {
         display: flex;
         flex-direction: column;
@@ -120,13 +120,13 @@
         justify-content: center;
         padding-top: 13px;
     }
-    
+
     .main-content {
         flex: 1;
         padding: 20px;
         overflow-y: auto;
     }
-    
+
     .main-content h1 {
         font-size: 36px;
         font-weight: bold;
@@ -134,13 +134,13 @@
         color: #333;
         margin-bottom: 20px;
     }
-    
+
     .tabs {
         display: flex;
         border-bottom: 2px solid #ddd;
         margin-bottom: 20px;
     }
-    
+
     .tab {
         padding: 10px 20px;
         cursor: pointer;
@@ -149,15 +149,15 @@
         border: none;
         background-color: transparent;
     }
-    
+
     .tab:hover {
         background-color: #f0f0f0;
     }
-    
+
     .tab.active {
         border-bottom: 2px solid #333;
     }
-    
+
     .card {
         background: #ffffff;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -214,7 +214,6 @@
         <div class="logo">IESCP</div>
         <ul>
             <li><a href="{{url_for('influencer_home')}}">Home</a></li>
-            
             <li><a href="#">Activity</a></li>
             <li><a href="{{url_for('influencer_requests')}}">Requests</a></li>
             <li><a href="#">Help & Support</a></li>
@@ -234,7 +233,7 @@
         <h1>Requests</h1>
         <div class="tabs">
             <a href="#" class="tab active" data-tab="request-tab-content">Request</a>
-            <a href="#" class="tab" data-tab="status-tab-content">Status</a>
+            <a href="{{url_for('request_status')}}" class="tab" data-tab="status-tab-content">Status</a>
         </div>
         <div id="tab-content">
             <!-- Request Tab Content -->
@@ -269,14 +268,13 @@
             </div>
             <!-- Status Tab Content -->
             <div id="status-tab-content" style="display: none;">
-                <!-- Status content will be added here later -->
                 <p>Status content will be added here later.</p>
             </div>
         </div>
     </div>
 </div>
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         const tabs = document.querySelectorAll('.tab');
         const requestTabContent = document.getElementById('request-tab-content');
@@ -299,5 +297,5 @@
             });
         });
     });
-</script>
+</script> -->
 {% endblock %}
