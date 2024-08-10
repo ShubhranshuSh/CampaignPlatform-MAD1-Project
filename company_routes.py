@@ -417,6 +417,15 @@ def campaign_delete_post(campaign_id):
     return redirect(url_for('company_activity'))
 
 
+@app.route('/company/campaign_request_sender')
+@company_auth_required
+def company_request_sender():
+    user = Company.query.get(session['company_id'])
+    campaigns = Campaign.query.filter_by(company_id=user.id).all()
+    return render_template('company_request_sender.html', user=user, campaigns=campaigns)
+
+
+
 @app.route('/company/requests')
 @company_auth_required
 def company_requests():

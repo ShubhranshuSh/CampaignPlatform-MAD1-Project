@@ -333,7 +333,7 @@
                 <div class="category">{{ influencer.category }}</div>
                 <button class="btn-primary"><a href="{{ influencer.social_media_links }}" target="_blank">Profile</a></button>
 
-                <button class="btn-primary"><a href="#">Add +</a></button>
+                <button class="btn-primary"><a href="{{url_for('company_request_sender')}}">Add +</a></button>
             </div>
             {% endfor %}
         </div>

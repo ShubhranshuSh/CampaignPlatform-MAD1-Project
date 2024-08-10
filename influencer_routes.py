@@ -273,6 +273,12 @@ def express_interest(campaign_id):
 
     return redirect(url_for('request_status'))
 
+@app.route('/influencer/request_actioned')
+@influencer_auth_required
+def influencer_request_actioned():
+    user = Influencer.query.get(session['influencer_id'])
+    return render_template('influencer_request_actioned.html', user=user)
+
 
 
 

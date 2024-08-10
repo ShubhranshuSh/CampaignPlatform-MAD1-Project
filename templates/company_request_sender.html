@@ -1,0 +1,196 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal overflow */
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+        }
+        
+        .container-box {
+            display: flex;
+            width: 100%;
+            min-height: 100vh; /* Ensure the container-box takes up the full height */
+        }
+        
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: fixed; /* Fixed positioning */
+            top: 0;
+            left: 0;
+            height: 100vh; /* Full viewport height */
+            overflow: auto; /* Allow scrolling within the sidebar */
+        }
+        
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+        
+        .sidebar ul li {
+            width: 100%;
+        }
+        
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px; /* Adjust this value to reduce the gap */
+        }
+        
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        /* Campaign Cards */
+        .campaigns-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+            width: calc(100% - 250px); /* Sidebar width adjustment */
+            margin-left: 250px; /* Push content to the right */
+        }
+        
+        .campaign-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .campaign-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .campaign-description {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .send-request-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .send-request-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+            <ul>
+                <li><a href="{{url_for('company_home')}}">Home</a></li>
+                <li><a href="{{ url_for('influencer_search') }}">Influencer</a></li>
+                <li><a href="{{ url_for('company_activity') }}">Activity</a></li>
+                <li><a href="{{url_for('company_requests')}}">Requests</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{ url_for('company_dashboard') }}">
+                    <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
+                    <div class="profile-name-category">
+                        <span class="company_name">{{ user.company_name }}</span>
+                        <span class="category">Company</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="campaigns-container">
+            {% for campaign in campaigns %}
+            <div class="campaign-card">
+                <div class="campaign-title">{{ campaign.title }}</div>
+                <div class="campaign-description">{{ campaign.description }}</div>
+                <div class="campaign-category">Category: {{ campaign.category }}</div>
+                <button class="send-request-btn">Send Request</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
