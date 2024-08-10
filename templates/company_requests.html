@@ -158,6 +158,42 @@
         border-bottom: 2px solid #333;
     }
     
+    .request-item {
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .request-item h3 {
+        margin: 0;
+    }
+    
+    .request-item p {
+        margin: 0;
+        font-size: 14px;
+    }
+    
+    .request-item button {
+        padding: 5px 10px;
+        border: none;
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-left: 5px;
+    }
+    
+    .accept-button {
+        background-color: #28a745;
+    }
+    
+    .reject-button {
+        background-color: #dc3545;
+    }
 </style>
 {% endblock %}
 
@@ -186,8 +222,9 @@
     <div class="main-content">
         <h1>Requests</h1>
         <div class="tabs">
-            <a href="#" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %}active{% endif %}">Request</a>
-            <a href="#" class="tab">Status</a>
+            <a href="{{url_for('company_requests')}}" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %}active{% endif %}">Request</a>
+            <a href="{{url_for('company_request_status')}}" class="tab {% if request.endpoint == 'company_request_status' %}active{% endif %}">Status</a>
+            <a href="{{url_for('company_actioned')}}" class="tab {% if request.endpoint == 'company_actioned' %}active{% endif %}">Actioned</a>
         </div>
         <div id="tab-content">
             <!-- Request Tab Content -->
@@ -196,16 +233,22 @@
                     {% if pending_requests %}
                         {% for request in pending_requests %}
                             <div class="request-item">
-                                <h3>Influencer: {{ request.influencer.name }}</h3>
-                                <p>Campaign: {{ request.campaign.title }}</p>
-                                <p>Status: {{ request.status }}</p>
-                                <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
-                                <form action="{{ url_for('accept_request', request_id=request.id) }}" method="post">
-                                    <button type="submit" class="btn btn-success">Accept</button>
-                                </form>
-                                <form action="{{ url_for('reject_request', request_id=request.id) }}" method="post">
-                                    <button type="submit" class="btn btn-danger">Reject</button>
-                                </form>
+                                <div>
+                                    <h3>Influencer: {{ request.influencer.name }}</h3>
+                                    <p>Campaign: {{ request.campaign.title }}</p>
+                                    <p>Status: {{ request.status }}</p>
+                                    <p>Requested on: {{ request.expressed_at.strftime('%Y-%m-%d') }}</p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary"><a href="{{request.influencer.social_media_links}}" target="_blank">View Profile</a></button>
+
+                                    <form action="{{ url_for('accept_request', request_id=request.id) }}" method="post" style="display:inline;">
+                                        <button type="submit" class="accept-button">Accept</button>
+                                    </form>
+                                    <form action="{{ url_for('reject_request', request_id=request.id) }}" method="post" style="display:inline;">
+                                        <button type="submit" class="reject-button">Reject</button>
+                                    </form>
+                                </div>
                             </div>
                         {% endfor %}
                     {% else %}
@@ -217,7 +260,10 @@
             <div id="status-tab-content" style="display: none;">
                 <p>This section is under construction.</p>
             </div>
-
+            <!-- Actioned Tab Content -->
+            <div id="actioned-tab-content" style="display: none;">
+                <p>This section will display actioned requests.</p>
+            </div>
         </div>
     </div>
 </div>
@@ -227,21 +273,34 @@
         const tabs = document.querySelectorAll('.tab');
         const requestTabContent = document.getElementById('request-tab-content');
         const statusTabContent = document.getElementById('status-tab-content');
+        const actionedTabContent = document.getElementById('actioned-tab-content');
 
         tabs.forEach((tab, index) => {
             tab.addEventListener('click', function () {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                if (index === 0) {
+                if (tab.textContent === 'Request') {
                     requestTabContent.style.display = 'block';
                     statusTabContent.style.display = 'none';
-                } else if (index === 1) {
+                    actionedTabContent.style.display = 'none';
+                } else if (tab.textContent === 'Status') {
                     requestTabContent.style.display = 'none';
                     statusTabContent.style.display = 'block';
+                    actionedTabContent.style.display = 'none';
+                } else if (tab.textContent === 'Actioned') {
+                    requestTabContent.style.display = 'none';
+                    statusTabContent.style.display = 'none';
+                    actionedTabContent.style.display = 'block';
                 }
             });
         });
+
+        // Set the initial active tab and content
+        const initialTab = document.querySelector('.tab.active');
+        if (initialTab) {
+            initialTab.click();
+        }
     });
 </script>
 {% endblock %}

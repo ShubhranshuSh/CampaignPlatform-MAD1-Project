@@ -445,8 +445,8 @@ def accept_request(request_id):
         request.status = 'accepted'
         db.session.commit()
 
-        # Redirect to the company_cast page to reflect the changes
-        return redirect(url_for('company_cast'))
+        # Redirect to the actioned page to reflect the changes
+        return redirect(url_for('company_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
 
@@ -460,21 +460,32 @@ def reject_request(request_id):
         request.status = 'rejected'  # Update status instead of deleting
         db.session.commit()
 
-        # Redirect back to the requests page
-        return redirect(url_for('company_requests'))
+        # Redirect to the actioned page to reflect the changes
+        return redirect(url_for('company_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
 
 
-@app.route('/campaign/<int:campaign_id>/cast')
-@company_auth_required
-def company_cast(campaign_id):
-    user = Company.query.get(session['company_id'])
-    campaigns = Campaign.query.filter_by(id=campaign_id).first()
-    # influencers=request.args.get('influencer')
-    print(campaigns.influencers)
-    return render_template('company_cast.html', user=user, campaign=campaigns)
 
+@app.route('/company/request_status')
+@company_auth_required
+def company_request_status():
+    user = Company.query.get(session['company_id'])
+    return render_template('company_request_status.html', user=user)
+
+
+
+
+
+@app.route('/company/actioned')
+@company_auth_required
+def company_actioned():
+    user = Company.query.get(session['company_id'])
+
+    # Fetch actioned requests for this company
+    actioned_requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).filter(InterestedCampaigns.status.in_(['accepted', 'rejected'])).all()
+    
+    return render_template('company_actioned.html', user=user, actioned_requests=actioned_requests)
     
 
 

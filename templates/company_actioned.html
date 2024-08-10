@@ -1,16 +1,11 @@
 {% extends 'layout.html' %}
 
-{% block title %}
-    IESCP : Status Overview
-{% endblock %}
-
 {% block styles %}
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
             background-color: #f4f6f8;
         }
 
@@ -34,6 +29,7 @@
             padding-top: 20px;
             position: fixed;
             top: 0;
+            left: 0;
             height: 100vh;
             overflow: auto;
         }
@@ -64,7 +60,7 @@
         }
 
         .sidebar ul li a:hover {
-            background-color: rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .profile {
@@ -117,14 +113,14 @@
             justify-content: center;
             padding-top: 13px;
         }
-
+        
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-left: 250px; /* Adjust for sidebar width */
-            overflow-y: auto;
+            margin-left: 250px; /* Add margin to prevent overlap */
+            overflow-y: auto; /* Enable scrolling within the main content */
         }
-
+        
         .main-content h1 {
             font-size: 36px;
             font-weight: bold;
@@ -132,13 +128,13 @@
             color: #333;
             margin-bottom: 20px;
         }
-
+        
         .tabs {
             display: flex;
             border-bottom: 2px solid #ddd;
             margin-bottom: 20px;
         }
-
+        
         .tab {
             padding: 10px 20px;
             cursor: pointer;
@@ -147,59 +143,35 @@
             border: none;
             background-color: transparent;
         }
-
+        
         .tab:hover {
             background-color: #f0f0f0;
         }
-
+        
         .tab.active {
             border-bottom: 2px solid #333;
         }
 
-        .status-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .status-item {
+        .request-item {
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-            width: calc(100% - 40px); /* Full width minus some padding */
-            max-width: 1000px; /* Max width for larger screens */
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
-
-        .status-item h3 {
-            margin: 0;
-            font-size: 24px;
+        
+        .request-item h3 {
+            margin-top: 0;
+        }
+        
+        .status-accepted {
+            color: green;
             font-weight: bold;
-            color: #333;
         }
-
-        .status-item p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .status-item .status {
+        
+        .status-rejected {
+            color: red;
             font-weight: bold;
-            font-size: 16px;
-        }
-
-        .status-item .status.pending {
-            color: #ff9800;
-        }
-
-        .status-item .status.accepted {
-            color: #4caf50;
-        }
-
-        .status-item .status.rejected {
-            color: #f44336;
         }
     </style>
 {% endblock %}
@@ -209,39 +181,50 @@
         <div class="sidebar">
             <div class="logo">IESCP</div>
             <ul>
-                <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
-                <li><a href="{{ url_for('influencer_requests') }}">Requests</a></li>
+                <li><a href="{{url_for('company_home')}}">Home</a></li>
+                <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
+                <li><a href="{{url_for('company_activity')}}">Activity</a></li>
+                <li><a href="{{url_for('company_requests')}}">Requests</a></li>
                 <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
-                <a href="{{ url_for('influencer_dashboard') }}">
-                    <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                <a href="{{ url_for('company_dashboard') }}">
+                    <img src="{{ url_for('static', filename='profile_upload/company/' + user.username + '/' + user.logo) }}" alt="Profile Picture">
                     <div class="profile-name-category">
-                        <span class="name">{{ user.name }}</span>
-                        <span class="category">Influencer</span>
+                        <span class="company_name">{{ user.company_name }}</span>
+                        <span class="category">Company</span>
                     </div>
                 </a>
             </div>
         </div>
 
         <div class="main-content">
-            <h1>Status Overview</h1>
+            <h1>Actioned Requests</h1>
             <div class="tabs">
-                <a href="{{ url_for('influencer_requests') }}" class="tab">Request</a>
-                <a href="{{url_for('request_status')}}" class="tab active">Status</a>
+                <a href="{{url_for('company_requests')}}" class="tab">Request</a>
+                <a href="{{url_for('company_request_status')}}" class="tab">Status</a>
+                <a href="{{url_for('company_actioned')}}" class="tab active">Actioned</a>
             </div>
-
-            <div class="status-list">
-                {% for interest in interests %}
-                <div class="status-item">
-                    <h3>{{ interest.campaign.title }}</h3>
-                    <p>Company: {{interest.company.company_name}}</p>
-                    <p>Description: {{ interest.campaign.description }}</p>
-                    <p>Budget: {{ interest.campaign.budget }}</p>
-                    <p class="status {{ interest.status}}">{{ interest.status }}</p>
-                </div>
+            {% if actioned_requests %}
+                {% for request in actioned_requests %}
+                    <div class="request-item">
+                        <h3>{{ request.campaign.name }}</h3>
+                        <p>Influencer: {{ request.influencer.name }}</p>
+                        <p>Influencer Category: {{request.influencer.category}}</p>
+                        <p>Campaign: {{request.campaign.title}}</p>
+                        <p>Status: 
+                            {% if request.status == 'accepted' %}
+                                <span class="status-accepted">Accepted</span>
+                            {% elif request.status == 'rejected' %}
+                                <span class="status-rejected">Rejected</span>
+                            {% endif %}
+                        </p>
+                        <button class="btn btn-primary"><a href="{{request.influencer.social_media_links}}" target="_blank">View Profile</a></button>
+                    </div>
                 {% endfor %}
-            </div>
+            {% else %}
+                <p>No actioned requests to display.</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
