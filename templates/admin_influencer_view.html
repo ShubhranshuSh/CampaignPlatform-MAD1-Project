@@ -100,7 +100,7 @@
         }
         .main-content {
             flex-grow: 1;
-            margin-left: 250px; /* Same as the sidebar width */
+            margin-left: 250px; 
             padding: 20px;
         }
         .activity-heading {
@@ -157,7 +157,7 @@
         .filter-container .form-inline {
             display: flex;
             align-items: center;
-            flex-wrap: wrap; /* Ensure elements wrap on small screens */
+            flex-wrap: wrap; 
         }
     
         .filter-container .form-inline .form-group {
@@ -198,7 +198,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
-            width: 220px; /* Increased width for better name fit */
+            width: 220px; 
             position: relative;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
@@ -223,7 +223,7 @@
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 5px;
-            word-wrap: break-word; /* Allow long names to wrap */
+            word-wrap: break-word; 
         }
     
         .card .category {
@@ -265,7 +265,7 @@
             background-color: #0056b3;
         }
     
-        /* Responsive Design */
+        
         @media (max-width: 768px) {
             .sidebar {
                 width: 200px;
@@ -305,9 +305,9 @@
             <div class="logo">IESCP</div>
             <ul>
                 <li><a href="{{ url_for('admin_home') }}">Home</a></li>
-                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
                 <li><a href="{{ url_for('admin_company_view') }}">Companies</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
+                
             </ul>
             <div class="profile">
                 <a href="{{ url_for('admin_dashboard') }}">

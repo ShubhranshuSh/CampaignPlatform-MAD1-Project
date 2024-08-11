@@ -46,7 +46,6 @@ def admin_login_post():
 @app.route('/admin/dashboard')
 def admin_dashboard():
     user=session.get('admin_id')
-    # Example data; replace with actual data-fetching logic
     total_influencers = Influencer.query.count()
     total_companies = Company.query.count()
     total_campaigns = Campaign.query.count()
@@ -64,20 +63,20 @@ def admin_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-    # Start with the base query for all campaigns (public and private)
-    campaigns_query = Campaign.query.filter_by(is_flag=False)
+   
+    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False).filter(Campaign.status != 'done')
 
-    # Apply category filter if selected
+    
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
 
-    # Apply sorting
+   
     if selected_sort == 'oldest':
         campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()
     else:
         campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()
 
-    # Define the list of categories
+    
     categories = [
         "Fashion", 
         "Beauty", 
@@ -103,16 +102,16 @@ def admin_home():
 @app.route('/admin/flag_campaign/<int:campaign_id>', methods=['POST'])
 @admin_auth_required
 def flag_campaign(campaign_id):
-    # Find the campaign by ID
+    
     campaign = Campaign.query.get_or_404(campaign_id)
     
-    # Update the is_flag attribute
+   
     campaign.is_flag = True
     
-    # Commit the change to the database
+  
     db.session.commit()
     
-    # Redirect back to the admin home page
+    
     return redirect(url_for('admin_home'))
 
 
@@ -122,7 +121,7 @@ def admin_campaign_view(campaign_id):
     campaign = Campaign.query.get(campaign_id)
     if not campaign:
         flash('Campaign not found!', 'error')
-        return redirect(url_for('admin_home'))  # Redirect to a safe page
+        return redirect(url_for('admin_home'))  
     user = Admin.query.get(session['admin_id'])
     return render_template('admin_campaign_view.html', campaign=campaign, user=user)
 
@@ -213,3 +212,10 @@ def admin_influencer_view():
         selected_category=selected_category,
         user=user
     )
+
+
+@app.route('/admin/logout')
+@admin_auth_required
+def admin_logout():
+    session.pop('admin_id')
+    return redirect(url_for('admin_login'))

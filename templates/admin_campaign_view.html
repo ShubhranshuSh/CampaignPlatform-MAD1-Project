@@ -100,7 +100,7 @@
         }
         .main-content {
             flex-grow: 1;
-            margin-left: 250px; /* Same as the sidebar width */
+            margin-left: 250px; 
             padding: 20px;
         }
         .activity-heading {
@@ -161,12 +161,11 @@
             <div class="logo">IESCP</div>
             <ul>
                 <li><a href="{{url_for('admin_home')}}">Home</a></li>
-                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
                 <li><a href="{{url_for('admin_company_view')}}">Companies</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
             </ul>
             <div class="profile">
-                <a href="{{ url_for('admin_dashboard') }}">Admin
+                <a href="{{ url_for('admin_dashboard') }}">
                     <div class="profile-name-category">
                         <span class="name">{{ user.name }}</span>
                     </div>

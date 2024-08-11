@@ -525,10 +525,6 @@ def company_actioned():
     return render_template('company_actioned.html', user=user, actioned_requests=actioned_requests)
     
 
-
-
-
-
 @app.route('/company_logout')
 @company_auth_required
 def company_logout():
