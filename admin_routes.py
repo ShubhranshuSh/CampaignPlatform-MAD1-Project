@@ -6,6 +6,11 @@ from models import db, Influencer, Company, Admin , Campaign , InterestedCampaig
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
+import matplotlib.pyplot as plt
+import io
+import base64
+import plotly.graph_objects as go
+import kaleido
 
 from config import *
 
@@ -45,15 +50,66 @@ def admin_login_post():
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
-    user=session.get('admin_id')
+    user = session.get('admin_id')
     total_influencers = Influencer.query.count()
     total_companies = Company.query.count()
     total_campaigns = Campaign.query.count()
 
+    
+    influencer_category_counts = db.session.query(Influencer.category, db.func.count(Influencer.id)).group_by(Influencer.category).all()
+    influencer_category_counts = dict(influencer_category_counts)
+
+    company_industry_counts = db.session.query(Company.industry, db.func.count(Company.id)).group_by(Company.industry).all()
+    company_industry_counts = dict(company_industry_counts)
+
+    campaign_category_counts = db.session.query(Campaign.category, db.func.count(Campaign.id)).group_by(Campaign.category).all()
+    campaign_category_counts = dict(campaign_category_counts)
+
+    
+    def create_pie_chart_3d(category_counts, title):
+        labels = list(category_counts.keys())
+        values = list(category_counts.values())
+        
+        fig = go.Figure(go.Pie(
+            labels=labels, 
+            values=values, 
+            hoverinfo="label+percent", 
+            textinfo="label+percent",
+            textposition="inside",
+            pull=[0.05] * len(labels),
+            hole=0.3,
+            marker=dict(line=dict(color='#000000', width=2)),
+            showlegend=True
+        ))
+
+        fig.update_layout(
+            title_text=title, 
+            title_x=0.5,
+            margin=dict(l=0, r=0, t=50, b=0),
+            scene=dict(
+                aspectmode="manual",
+                aspectratio=dict(x=1, y=1, z=0.5),
+            )
+        )
+
+        
+        img_bytes = fig.to_image(format="png", engine="kaleido")
+        chart_url = base64.b64encode(img_bytes).decode('utf-8')
+        return chart_url
+
+    
+    influencer_chart_url = create_pie_chart_3d(influencer_category_counts, "Influencer Category Distribution")
+    company_chart_url = create_pie_chart_3d(company_industry_counts, "Company Industry Distribution")
+    campaign_chart_url = create_pie_chart_3d(campaign_category_counts, "Campaign Category Distribution")
+
     return render_template('admin_dashboard.html',
                            total_influencers=total_influencers,
                            total_companies=total_companies,
-                           total_campaigns=total_campaigns,user=user)
+                           total_campaigns=total_campaigns,
+                           user=user,
+                           influencer_chart_url=influencer_chart_url,
+                           company_chart_url=company_chart_url,
+                           campaign_chart_url=campaign_chart_url)
 
 
 @app.route('/admin/home')
