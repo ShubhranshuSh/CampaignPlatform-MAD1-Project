@@ -118,15 +118,14 @@
             padding-top: 13px;
         }
 
-        /* Profile Page Styling */
         .main-content {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             height: 100vh;
-            margin-left: 250px; /* Ensure there's enough margin to accommodate the fixed sidebar */
-            padding: 20px; /* Add padding to give some space around the content */
+            margin-left: 250px; 
+            padding: 20px; 
         }
 
         .header {
@@ -236,23 +235,16 @@
             cursor: not-allowed;
         }
         button[type="submit"] {
-            background-color: #007bff; /* Blue background color */
-            color: white; /* White text color */
-            border: none; /* Remove border */
-            border-radius: 5px; /* Rounded corners */
-            padding: 15px; /* Padding for a comfortable click area */
-            font-size: 16px; /* Larger font size */
-            font-weight: bold; /* Bold text */
-            cursor: pointer; /* Pointer cursor on hover */
-            width: 100%; /* Full width */
-            margin-top: 20px; /* Margin at the top */
-            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+            border-radius: 5px; 
+            padding: 15px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 20px; 
+            transition: background-color 0.3s ease; 
         }
-        
-        /* Hover effect for the button */
-        button[type="submit"]:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
+    
         
     </style>
 {% endblock %}
@@ -266,7 +258,6 @@
                 <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
                 <li><a href="{{url_for('company_activity')}}">Activity</a></li>
                 <li><a href="{{url_for('company_requests')}}">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
                 <a href="{{ url_for('company_dashboard') }}">
@@ -354,7 +345,7 @@
                             <textarea id="address" name="address">{{ user.address }}</textarea>
                         </div>
                     </div>
-                    <button type="submit">Save Changes</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>

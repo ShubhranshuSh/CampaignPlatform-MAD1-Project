@@ -104,7 +104,7 @@
         }
         .main-content {
             flex-grow: 1;
-            margin-left: 250px; /* Same as the sidebar width */
+            margin-left: 250px; 
             padding: 20px;
         }
         .activity-heading {
@@ -175,8 +175,7 @@
             <div class="logo">IESCP</div>
             <ul>
                 <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
-                <li><a href="{{ url_for('influencer_requests') }}">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{ url_for('influencer_campaign_requests') }}">Requests</a></li>
             </ul>
             <div class="profile">
                 <a href="{{ url_for('influencer_dashboard') }}">

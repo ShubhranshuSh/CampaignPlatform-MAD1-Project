@@ -122,7 +122,7 @@
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-left: 250px; /* Adjust for sidebar width */
+            margin-left: 250px; 
             overflow-y: auto;
         }
 
@@ -170,8 +170,8 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin: 20px 0;
-            width: calc(100% - 40px); /* Full width minus some padding */
-            max-width: 1000px; /* Max width for larger screens */
+            width: calc(100% - 40px); 
+            max-width: 1000px; 
         }
 
         .status-item h3 {
@@ -211,8 +211,7 @@
             <div class="logo">IESCP</div>
             <ul>
                 <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
-                <li><a href="{{ url_for('influencer_requests') }}">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{ url_for('influencer_campaign_requests') }}">Requests</a></li>
             </ul>
             <div class="profile">
                 <a href="{{ url_for('influencer_dashboard') }}">
@@ -228,9 +227,9 @@
         <div class="main-content">
             <h1>Status Overview</h1>
             <div class="tabs">
-                <a href="{{ url_for('influencer_requests') }}" class="tab">Request</a>
+                <a href="{{ url_for('influencer_campaign_requests') }}" class="tab">Request</a>
                 <a href="{{url_for('request_status')}}" class="tab active">Status</a>
-                <a href="{{url_for('influencer_request_actioned')}}" class="tab">Actioned Status</a>
+                <a href="{{url_for('influencer_request_actioned')}}" class="tab">Actioned</a>
             </div>
 
             <div class="status-list">

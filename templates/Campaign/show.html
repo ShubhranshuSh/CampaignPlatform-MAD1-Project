@@ -1,5 +1,10 @@
 {% extends 'layout.html' %}
 
+
+{% block title %}
+    IESCP : Campaign Detailed View
+{% endblock %}
+
 {% block styles %}
     <style>
         body {
@@ -197,8 +202,8 @@
                 <li><a href="{{url_for('company_home')}}">Home</a></li>
                 <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
                 <li><a href="{{url_for('company_activity')}}">Activity</a></li>
-                <li><a href="#">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{url_for('company_requests')}}">Requests</a></li>
+               
             </ul>
             <div class="profile">
                 <a href="{{ url_for('company_dashboard') }}">
@@ -213,7 +218,6 @@
         <div class="container">
             <div class="activity-heading">
                 <h1>Detailed View</h1>
-                <a href="{{ url_for('company_activity') }}" class="btn btn-primary">Back To Activity</a>
             </div>
             <div class="tabs">
                 <a href="{{ url_for('campaign_view', campaign_id=campaign.id) }}" class="tab active">Details</a>

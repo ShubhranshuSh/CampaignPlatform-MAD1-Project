@@ -45,9 +45,6 @@ def company_register_post():
     logo = request.files.get('logo')
 
 
-    # debugging the form data
-    # print(company_name, username, email, password, confirm_password, phone_number, address, industry, website, description, social_media_link, logo)
-
     if not all([company_name, username, email, password, confirm_password, phone_number, address, industry ,website, description, social_media_link, logo]):
         flash('All fields are required')
         return redirect(url_for('company_register'))
@@ -104,20 +101,16 @@ def company_login_post():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # Check if username and password are provided
     if not username or not password:
         flash('All the fields are required')
         return redirect(url_for('company_login'))
 
-    # Query for the company user by username
     company = Company.query.filter_by(username=username).first()
 
-    # Check if company exists and the password matches
     if not company or not check_password_hash(company.password_hash, password):
         flash('Invalid username or password')
         return redirect(url_for('company_login'))
 
-    # Redirect to the welcome message page on successful login
     session['company_id'] = company.id
     return redirect(url_for('company_dashboard'))
 
@@ -206,8 +199,8 @@ def company_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-    # Filter campaigns to include only public and non-flagged campaigns
-    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False)
+    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False).filter(Campaign.status != 'done')
+
 
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
@@ -341,7 +334,7 @@ def campaign_add_post():
         company_id=session['company_id'],
         status=status,
         category=category,
-        visibility=visibility,  # Add visibility to campaign
+        visibility=visibility, 
         created_at=datetime.utcnow()
     )
 
@@ -353,8 +346,8 @@ def campaign_add_post():
 @app.route('/campaign/<int:campaign_id>/view')
 @company_auth_required
 def campaign_view(campaign_id):
-    campaign = Campaign.query.get_or_404(campaign_id)  # Use get_or_404 to handle cases where the campaign is not found
-    user = Company.query.get_or_404(session['company_id'])  # Use get_or_404 to handle cases where the company is not found
+    campaign = Campaign.query.get_or_404(campaign_id)  
+    user = Company.query.get_or_404(session['company_id']) 
     return render_template('Campaign/show.html', campaign=campaign, user=user)
 
 @app.route('/campaign/<int:campaign_id>/edit')
@@ -398,7 +391,7 @@ def campaign_edit_post(campaign_id):
     campaign.end_date = end_date
     campaign.status = status
     campaign.category = category
-    campaign.visibility = visibility  # Update visibility
+    campaign.visibility = visibility  
 
     db.session.commit()
 
@@ -427,9 +420,9 @@ def company_request_sender():
     
     if not user:
         flash('User not found!', 'error')
-        return redirect(url_for('company_login'))  # Redirect to login or another page
+        return redirect(url_for('company_login'))  
     
-    campaigns = Campaign.query.filter_by(company_id=user.id).all()  # Fetch campaigns associated with the company
+    campaigns = Campaign.query.filter_by(company_id=user.id).all()  
     
     return render_template('company_request_sender.html', user=user, campaigns=campaigns)
 
@@ -450,7 +443,7 @@ def company_request_status():
 def company_send_request(campaign_id):
     user_id = session['company_id']
     campaigns = Campaign.query.get_or_404(campaign_id)
-    influencer_id = campaigns.company_id  # Fix here: use campaigns.company_id to get the influencer's company_id
+    influencer_id = campaigns.company_id 
 
     existing_interest = AdRequest.query.filter_by(
         company_id=user_id,
@@ -461,7 +454,7 @@ def company_send_request(campaign_id):
         interest = AdRequest(
             company_id=user_id,
             campaign_id=campaign_id,
-            influencer_id=influencer_id,  # Fix here: use the correct influencer_id
+            influencer_id=influencer_id,  
             status='pending'
         )
         db.session.add(interest)
@@ -477,10 +470,10 @@ def company_send_request(campaign_id):
 def company_requests():
     user = Company.query.get(session['company_id'])
     
-    # Fetch requests related to this company
+    
     requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).all()
     
-    # Separate requests by status
+    
     pending_requests = [req for req in requests if req.status == 'pending']
     accepted_requests = [req for req in requests if req.status == 'accepted']
     rejected_requests = [req for req in requests if req.status == 'rejected']
@@ -500,11 +493,10 @@ def accept_request(request_id):
         request.status = 'accepted'
         db.session.commit()
 
-        # Redirect to the actioned page to reflect the changes
+    
         return redirect(url_for('company_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
-
 
 
 @app.route('/company/requests/reject/<int:request_id>', methods=['POST'])
@@ -512,19 +504,13 @@ def accept_request(request_id):
 def reject_request(request_id):
     request = InterestedCampaigns.query.get(request_id)
     if request:
-        request.status = 'rejected'  # Update status instead of deleting
+        request.status = 'rejected'  
         db.session.commit()
 
-        # Redirect to the actioned page to reflect the changes
+        
         return redirect(url_for('company_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
-
-
-
-
-
-
 
 
 
@@ -533,21 +519,11 @@ def reject_request(request_id):
 def company_actioned():
     user = Company.query.get(session['company_id'])
 
-    # Fetch actioned requests for this company
+
     actioned_requests = db.session.query(InterestedCampaigns).join(Campaign).filter(Campaign.company_id == user.id).filter(InterestedCampaigns.status.in_(['accepted', 'rejected'])).all()
     
     return render_template('company_actioned.html', user=user, actioned_requests=actioned_requests)
     
-
-
-
-
-
-
-
-
-
-
 
 
 

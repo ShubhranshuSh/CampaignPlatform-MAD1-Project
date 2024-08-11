@@ -19,7 +19,7 @@
     .container-box {
         display: flex;
         flex: 1;
-        height: 100%; /* Ensures the container takes the full height */
+        height: 100%;
     }
     
     a {
@@ -124,7 +124,7 @@
     .main-content {
         flex: 1;
         padding: 20px;
-        overflow-y: auto; /* Enable scrolling within the main content */
+        overflow-y: auto; 
     }
     
     .main-content h1 {
@@ -206,7 +206,6 @@
             <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
             <li><a href="{{url_for('company_activity')}}">Activity</a></li>
             <li><a href="{{url_for('company_requests')}}">Requests</a></li>
-            <li><a href="#">Help & Support</a></li>
         </ul>
         <div class="profile">
             <a href="{{ url_for('company_dashboard') }}">
@@ -222,12 +221,11 @@
     <div class="main-content">
         <h1>Requests</h1>
         <div class="tabs">
-            <a href="{{url_for('company_requests')}}" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %}active{% endif %}">Request</a>
-            <a href="{{url_for('company_request_status')}}" class="tab {% if request.endpoint == 'company_request_status' %}active{% endif %}">Status</a>
-            <a href="{{url_for('company_actioned')}}" class="tab {% if request.endpoint == 'company_actioned' %}active{% endif %}">Actioned</a>
+            <a href="{{url_for('company_requests')}}" class="tab {% if request.endpoint == 'company_requests' and 'pending' in request.args.values() %} active{% endif %}">Request</a>
+            <a href="{{url_for('company_request_status')}}" class="tab">Status</a>
+            <a href="{{url_for('company_actioned')}}" class="tab">Actioned</a>
         </div>
         <div id="tab-content">
-            <!-- Request Tab Content -->
             <div id="request-tab-content">
                 <div class="request-list">
                     {% if pending_requests %}
@@ -255,14 +253,6 @@
                         <p>No requests found.</p>
                     {% endif %}
                 </div>
-            </div>
-            <!-- Status Tab Content -->
-            <div id="status-tab-content" style="display: none;">
-                <p>This section is under construction.</p>
-            </div>
-            <!-- Actioned Tab Content -->
-            <div id="actioned-tab-content" style="display: none;">
-                <p>This section will display actioned requests.</p>
             </div>
         </div>
     </div>

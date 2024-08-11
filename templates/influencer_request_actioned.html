@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 
+{% block title %}
+    IESCP : Actioned Requests
+{% endblock %}
+
 {% block styles %}
     <style>
         body {
@@ -161,8 +165,7 @@
             <div class="logo">IESCP</div>
             <ul>
                 <li><a href="{{ url_for('influencer_home') }}">Home</a></li>
-                <li><a href="{{ url_for('influencer_requests') }}">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
+                <li><a href="{{ url_for('influencer_campaign_requests') }}">Requests</a></li>
             </ul>
             <div class="profile">
                 <a href="{{ url_for('influencer_dashboard') }}">
@@ -178,9 +181,9 @@
         <div class="main-content">
             <h1>Request Actioned</h1>
             <div class="tabs">
-                <a href="{{ url_for('influencer_requests') }}" class="tab">Request</a>
+                <a href="{{ url_for('influencer_campaign_requests') }}" class="tab">Request</a>
                 <a href="{{url_for('request_status')}}" class="tab">Status</a>
-                <a href="{{url_for('influencer_request_actioned')}}" class="tab active">Actioned Status</a>
+                <a href="{{url_for('influencer_request_actioned')}}" class="tab active">Actioned</a>
             </div>
 
             <div id="tab-content">

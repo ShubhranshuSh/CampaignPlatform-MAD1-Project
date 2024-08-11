@@ -203,9 +203,7 @@
         <div class="logo">IESCP</div>
         <ul>
             <li><a href="{{url_for('influencer_home')}}">Home</a></li>
-            <li><a href="#">Activity</a></li>
-            <li><a href="{{url_for('influencer_requests')}}">Requests</a></li>
-            <li><a href="#">Help & Support</a></li>
+            <li><a href="{{url_for('influencer_campaign_requests')}}">Requests</a></li>
         </ul>
         <div class="profile">
             <a href="{{ url_for('influencer_dashboard') }}">
@@ -227,7 +225,6 @@
             
         </div>
         <div id="tab-content">
-            <!-- Request Tab Content -->
             <div id="request-tab-content">
                 <div class="request-list">
                     {% if pending_requests %}
@@ -241,7 +238,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-primary">
-                                        <a href="{{ request.company.website }}" target="_blank">View Profile</a>
+                                        <a href="{{ request.company.website }}" target="_blank">Visit Website</a>
                                     </button>
                                     <form action="{{ url_for('influencer_accept_request', request_id=request.id) }}" method="post" style="display:inline;">
                                         <button type="submit" class="accept-button">Accept</button>

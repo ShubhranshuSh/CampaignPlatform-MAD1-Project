@@ -1,6 +1,10 @@
 {% extends 'layout.html' %}
 
 
+{% block title %}
+    IESCP : Request Status
+{% endblock %}
+
 {% block styles %}
     <style>
         body {
@@ -118,8 +122,8 @@
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-left: 250px; /* Add margin to prevent overlap */
-            overflow-y: auto; /* Enable scrolling within the main content */
+            margin-left: 250px; 
+            overflow-y: auto; 
         }
         
         .main-content h1 {
@@ -165,8 +169,8 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin: 20px 0;
-            width: calc(100% - 40px); /* Full width minus some padding */
-            max-width: 1000px; /* Max width for larger screens */
+            width: calc(100% - 40px); 
+            max-width: 1000px; 
         }
 
         .status-item h3 {
@@ -211,7 +215,6 @@
             <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
             <li><a href="{{url_for('company_activity')}}">Activity</a></li>
             <li><a href="{{url_for('company_requests')}}">Requests</a></li>
-            <li><a href="#">Help & Support</a></li>
         </ul>
         <div class="profile">
             <a href="{{ url_for('company_dashboard') }}">
@@ -225,7 +228,7 @@
     </div>
 
     <div class="main-content">
-        <h1>Request Status</h1>
+        <h1>Status Overview</h1>
         <div class="tabs">
             <a href="{{url_for('company_requests')}}" class="tab">Request</a>
             <a href="{{url_for('company_request_status')}}" class="tab active">Status</a>

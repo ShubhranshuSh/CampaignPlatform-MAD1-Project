@@ -9,7 +9,6 @@ from functools import wraps
 
 from config import *
 
-# Declaring the auth required for influencer
 def influencer_auth_required(func):
     @wraps(func)
     def func2(*args, **kwargs):
@@ -189,8 +188,8 @@ def influencer_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-    # Filter campaigns to include only public and non-flagged campaigns
-    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False)
+    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False).filter(Campaign.status != 'done')
+
 
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
@@ -282,13 +281,9 @@ def express_interest(campaign_id):
 def influencer_campaign_requests():
     user = Influencer.query.get(session['influencer_id'])
     
-    # Query AdRequest where the influencer_id matches the current user
     requests = db.session.query(AdRequest).filter(AdRequest.influencer_id == user.id).all()
     
-    # Debug: Print the requests to verify
-    print(requests)
     
-    # Separate requests by status
     pending_requests = [req for req in requests if req.status == 'pending']
     accepted_requests = [req for req in requests if req.status == 'accepted']
     rejected_requests = [req for req in requests if req.status == 'rejected']
@@ -305,7 +300,6 @@ def influencer_accept_request(request_id):
         request.status = 'accepted'
         db.session.commit()
 
-        # Redirect to the actioned page to reflect the changes
         return redirect(url_for('influencer_request_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
@@ -319,7 +313,6 @@ def influencer_reject_request(request_id):
         request.status = 'rejected'
         db.session.commit()
 
-        # Redirect to the actioned page to reflect the changes
         return redirect(url_for('influencer_request_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
@@ -333,7 +326,6 @@ def influencer_reject_request(request_id):
 def influencer_request_actioned():
     user = Influencer.query.get(session['influencer_id'])
 
-    # Query for all AdRequests where the influencer_id matches the user and the status is accepted or rejected
     actioned_requests = db.session.query(AdRequest).filter(
         AdRequest.influencer_id == user.id,
         AdRequest.status.in_(['accepted', 'rejected'])

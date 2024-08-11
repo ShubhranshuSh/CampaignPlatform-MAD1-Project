@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    IESCP : Home
+    IESCP : Company Home
 {% endblock %}
 
 {% block styles %}
@@ -113,11 +113,11 @@
         .content {
             flex: 1;
             padding: 20px;
-            padding-left: 270px; /* This offset ensures content is not under the sidebar */
+            padding-left: 270px; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: calc(100% - 250px); /* Width adjusted to account for sidebar */
+            width: calc(100% - 250px); 
         }
         .filter-container {
             display: flex;
@@ -128,20 +128,20 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             width: auto;
-            max-width: 800px; /* Added max-width for better responsiveness */
+            max-width: 800px; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Center horizontally */
+            left: 50%; 
+            transform: translateX(-50%);
             z-index: 1000;
-            flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
+            flex-wrap: wrap; 
         }
         .filter-container .form-group {
             margin-bottom: 0;
             margin-right: 15px;
             flex: 1;
-            min-width: 150px; /* Ensures a minimum width for form elements */
+            min-width: 150px; 
         }
         .filter-container .form-group:last-child {
             margin-right: 0;
@@ -156,7 +156,7 @@
             display: flex;
             align-items: center;
             width: 100%;
-            flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
+            flex-wrap: wrap; 
         }
 
         .campaign-list {
@@ -165,7 +165,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin-top: 90px; /* Adjusting for fixed filter container */
+            margin-top: 90px; 
         }
 
         .campaign {
@@ -176,8 +176,8 @@
             margin: 20px 0;
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
-            width: calc(100% - 40px); /* Adjusted to take the full width minus some padding */
-            max-width: 1000px; /* Maximum width for larger screens */
+            width: calc(100% - 40px); 
+            max-width: 1000px;
         }
         .campaign:hover {
             transform: translateY(-5px);
@@ -235,7 +235,6 @@
                 <li><a href="{{url_for('influencer_search')}}">Influencer</a></li>
                 <li><a href="{{url_for('company_activity')}}">Activity</a></li>
                 <li><a href="{{url_for('company_requests')}}">Requests</a></li>
-                <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
                 <a href="{{url_for('company_dashboard')}}">
