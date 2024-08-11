@@ -206,7 +206,8 @@ def company_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-    campaigns_query = Campaign.query.filter_by(visibility='public')  # Only public campaigns
+    # Filter campaigns to include only public and non-flagged campaigns
+    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False)
 
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
@@ -235,6 +236,7 @@ def company_home():
     ]
 
     return render_template('company_home.html', campaigns=campaigns, categories=categories, selected_category=selected_category, selected_sort=selected_sort, user=user)
+
 
 
 
@@ -298,8 +300,9 @@ def campaign_created():
 @company_auth_required
 def company_activity():
     user = Company.query.get(session['company_id'])
-    campaign = Campaign.query.filter_by(company_id=session['company_id']).all()
-    return render_template('company_activity.html', campaigns=campaign, user=user)
+    campaigns = Campaign.query.filter_by(company_id=session['company_id']).all()
+    return render_template('company_activity.html', campaigns=campaigns, user=user)
+
 
 @app.route('/campaign/add')
 @company_auth_required

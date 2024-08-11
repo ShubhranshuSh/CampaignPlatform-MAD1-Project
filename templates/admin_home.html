@@ -127,15 +127,10 @@
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
-            width: auto;
+            width: 100%;
             max-width: 800px; /* Added max-width for better responsiveness */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Center horizontally */
-            z-index: 1000;
-            flex-wrap: wrap; /* Ensures elements wrap on smaller screens */
+            margin-bottom: 20px;
         }
         .filter-container .form-group {
             margin-bottom: 0;
@@ -165,7 +160,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin-top: 90px; /* Adjusting for fixed filter container */
+            margin-top: 20px; /* Adjusted for spacing */
         }
 
         .campaign {
@@ -185,13 +180,14 @@
         }
         .campaign-main-details {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             margin-bottom: 10px;
         }
         .campaign-title {
             display: flex;
-            flex-direction: column;
+            align-items: center; /* Align items vertically */
+            gap: 10px; /* Space between icon and title */
+            margin-bottom: 5px; /* Spacing between title and company name */
         }
         .campaign-title a {
             font-size: 24px;
@@ -203,25 +199,28 @@
         .campaign-title a:hover {
             color: #7289da;
         }
-        .campaign-title p {
+        .campaign-company,
+        .campaign-budget,
+        .campaign-category,
+        .campaign-dates {
             font-size: 14px;
             color: #555;
         }
-        .campaign-details {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .campaign p {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .campaign-meta {
-            display: flex;
-            justify-content: space-between;
+        .campaign-dates {
             font-size: 14px;
             color: #888;
+            margin-top: 5px;
+        }
+        .campaign-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px; /* Spacing above details */
+        }
+        .campaign-details p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px; /* Adjusted for spacing */
         }
     </style>
 {% endblock %}
@@ -231,16 +230,16 @@
         <div class="sidebar">
             <div class="logo">IESCP</div>
             <ul>
-                <li><a href="{{url_for('influencer_home')}}">Home</a></li>
-                <li><a href="{{url_for('influencer_requests')}}">Requests</a></li>
+                <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+                <li><a href="{{url_for('admin_company_view')}}">Companies</a></li>
+                <li><a href="{{ url_for('admin_influencer_view') }}}">Influencers</a></li>
                 <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
-                <a href="{{url_for('influencer_dashboard')}}">
-                    <img src="{{ url_for('static', filename='profile_upload/influencer/' + user.username + '/' + user.profile_picture) }}" alt="Profile Picture">
+                <a href="{{ url_for('admin_dashboard') }}">
+                    Admin
                     <div class="profile-name-category">
-                        <span class="name">{{user.name}}</span>
-                        <span class="category">Influencer</span>
+                        <span class="name">{{ user.name }}</span>
                     </div>
                 </a>
             </div>
@@ -269,22 +268,29 @@
             </div>
             <div class="campaign-list">
                 {% for campaign in campaigns %}
-                    <div class="campaign">
-                        <div class="campaign-main-details">
-                            <div class="campaign-title">
-                                <a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
-                                <p>By {{ campaign.company.company_name }}</p>
+                    {% if not campaign.is_flag %}
+                        <div class="campaign">
+                            <div class="campaign-main-details">
+                                <div class="campaign-title">
+                                    <form method="POST" action="{{ url_for('flag_campaign', campaign_id=campaign.id) }}">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                                            <i class="fa-regular fa-flag"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ url_for('admin_campaign_view', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
+                                </div>
+                                <p class="campaign-company">Company: {{ campaign.company.company_name }}</p>
+                                <p class="campaign-budget">Budget: ${{ campaign.budget }}</p>
+                                <p class="campaign-category">Category: {{ campaign.category }}</p>
+                                <p class="campaign-dates">Start Date: {{ campaign.start_date.strftime('%Y-%m-%d') }} | End Date: {{ campaign.end_date.strftime('%Y-%m-%d') }}</p>
+                            </div>
+                            <div class="campaign-details">
+                                <p>{{ campaign.description }}</p>
                             </div>
                         </div>
-                        <div class="campaign-details">
-                            <p>{{ campaign.description }}</p>
-                        </div>
-                        <div class="campaign-meta">
-                            <span>Category: {{ campaign.category }}</span>
-                            <span>Posted on: {{ campaign.created_at.strftime('%Y-%m-%d') }}</span>
-                        </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
+
             </div>
         </div>
     </div>

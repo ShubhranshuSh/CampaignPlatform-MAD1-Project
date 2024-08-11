@@ -189,15 +189,16 @@ def influencer_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-    campaigns_query = Campaign.query.filter_by(visibility='public')  # Only public campaigns
+    # Filter campaigns to include only public and non-flagged campaigns
+    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False)
 
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
 
     if selected_sort == 'oldest':
-        campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()  # Fixed the variable name here
+        campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()
     else:
-        campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()  # Fixed the variable name here
+        campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()
     
     categories = [
         "Fashion", 
@@ -218,6 +219,7 @@ def influencer_home():
     ]
 
     return render_template('influencer_home.html', campaigns=campaigns, categories=categories, selected_category=selected_category, selected_sort=selected_sort, user=user)
+
 
 
 @app.route('/campaign/<int:campaign_id>')

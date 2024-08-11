@@ -270,8 +270,15 @@
                     </div> |
                     <div>
                         <strong>Visibility:</strong> {{ campaign.visibility }}
+                    </div> |
+                    {% if campaign.is_flag %}
+                    <div style="color: red; font-weight: bold;">
+                        Flagged By Admin
                     </div>
+                    {% endif %}
                 </div>
+                
+                
 
                 <div class="campaign-meta">
                     <small class="campaign-timestamp" data-created-at="{{ campaign.created_at_ist.isoformat() }}"></small>

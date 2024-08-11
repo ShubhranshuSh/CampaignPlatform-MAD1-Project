@@ -14,6 +14,10 @@ class Admin(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     name = db.Column(db.String(150), nullable=False)
+    
+    # New relationship with Campaign
+    campaigns = db.relationship('Campaign', backref='admin', lazy=True)
+
 
 influencer_campaign_association = db.Table('influencer_campaign_association',
     db.Column('influencer_id', db.Integer, db.ForeignKey('influencers.id'), primary_key=True),
@@ -61,11 +65,18 @@ class Campaign(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    
+    # Foreign key to Admin with default value
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=False, default=1)
+    
     status = db.Column(db.String(50), nullable=False, default='pending')
     category = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     visibility = db.Column(db.String(50), nullable=False, default='public')
     influencers = db.relationship('Influencer', secondary=influencer_campaign_association, back_populates='campaigns')
+    
+    # New 'is_flag' column with default value set to False
+    is_flag = db.Column(db.Boolean, nullable=False, default=False)
 
     @property
     def created_at_ist(self):

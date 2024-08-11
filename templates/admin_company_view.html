@@ -1,0 +1,350 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+        }
+        .container-box {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow: auto;
+        }
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+        .sidebar ul li {
+            width: 100%;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar ul li a:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .profile-name-category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            padding-top: 13px;
+        }
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px; /* Same as the sidebar width */
+            padding: 20px;
+        }
+        .activity-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .activity-heading h1 {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        .profile-details {
+            padding: 20px;
+        }
+        .profile-details h2 {
+            margin-top: 0;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .detail-item label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .detail-item input,
+        .detail-item textarea,
+        .detail-item select {
+            background-color: #f4f6f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+            cursor: not-allowed;
+        }
+        .detail-item textarea {
+            resize: none;
+            height: 100px;
+        }
+        .hidden {
+            display: none;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+    
+        .filter-container .form-inline {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; /* Ensure elements wrap on small screens */
+        }
+    
+        .filter-container .form-inline .form-group {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            gap: 10px;
+        }
+    
+        .filter-container .form-inline .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .filter-container .form-inline .btn:hover {
+            background-color: #0056b3;
+        }
+    
+        .form-inline select {
+            height: 38px;
+        }
+    
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+    
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 220px; /* Increased width for better name fit */
+            position: relative;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+    
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+    
+        .card img {
+            border-radius: 50%;
+            margin-bottom: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        .card .name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            word-wrap: break-word; /* Allow long names to wrap */
+        }
+    
+        .card .category {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+    
+        .card button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .card button:hover {
+            background-color: #0056b3;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+    
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+    
+            .main-content {
+                padding: 15px;
+            }
+    
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            .card {
+                width: 90%;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+    
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+            <ul>
+                <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
+                <li><a href="{{ url_for('admin_company_view') }}">Companies</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{ url_for('admin_dashboard') }}">
+                    <div class="profile-name-category">
+                        <span class="name">{{ user.name }}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="main-content">
+            <h1>Companies</h1>
+            <hr>
+            <div class="filter-container">
+                <form method="GET" action="{{ url_for('admin_company_view') }}" class="form-inline">
+                    <div class="form-group">
+                        <label for="category" class="mr-2">Category</label>
+                        <select name="category" id="category" class="form-control">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+            </div>
+            <div class="card-container">
+                {% for company in companies %}
+                <div class="card profile-card" data-category="{{ company.industry }}">
+                    <img src="{{ url_for('static', filename='profile_upload/company/' + company.username + '/' + company.logo) }}" alt="Profile Picture">
+                    <div class="name">{{ company.company_name }}</div>
+                    <div class="category">{{ company.industry }}</div>
+                    <button class="btn btn-primary"><a href="{{ company.website }}" target="_blank">Visit Website</a></button>
+    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% extends 'layout.html' %}
+
+
+{% block styles %}
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+        }
+
+        .container-box {
+            display: flex;
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #28282B;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .sidebar ul li {
+            width: 100%;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .profile {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .profile .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile .category {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px; /* Same as the sidebar width */
+            padding: 20px;
+        }
+        .activity-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .activity-heading h1 {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Lexend Deca', sans-serif;
+            font-weight: 600;
+        }
+        .profile-details {
+            padding: 20px;
+        }
+        .profile-details h2 {
+            margin-top: 0;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .detail-item label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .detail-item input,
+        .detail-item textarea,
+        .detail-item select {
+            background-color: #f4f6f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+            cursor: not-allowed;
+        }
+        .detail-item textarea {
+            resize: none;
+            height: 100px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container-box">
+        <div class="sidebar">
+            <div class="logo">IESCP</div>
+            <ul>
+                <li><a href="{{url_for('admin_home')}}">Home</a></li>
+                <li><a href="{{ url_for('admin_influencer_view') }}">Influencers</a></li>
+                <li><a href="{{url_for('admin_company_view')}}">Companies</a></li>
+                <li><a href="#">Help & Support</a></li>
+            </ul>
+            <div class="profile">
+                <a href="{{ url_for('admin_dashboard') }}">Admin
+                    <div class="profile-name-category">
+                        <span class="name">{{ user.name }}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="activity-heading">
+                <h1>Detailed View</h1>
+                <a href="{{ url_for('admin_home') }}" class="btn btn-primary">Back To Home</a>
+            </div>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ campaign.title }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" readonly>{{ campaign.description }}</textarea>
+                </div>
+                <div class="detail-item">
+                    <label for="budget">Budget</label>
+                    <input type="text" id="budget" name="budget" value="{{ campaign.budget }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="start_date">Start Date</label>
+                    <input type="text" id="start_date" name="start_date" value="{{ campaign.start_date }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="end_date">End Date</label>
+                    <input type="text" id="end_date" name="end_date" value="{{ campaign.end_date }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="status">Status</label>
+                    <input type="text" id="status" name="status" value="{{ campaign.status }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" value="{{ campaign.category }}" readonly>
+                </div>
+                <div class="detail-item">
+                    <label for="visibility">Visibility</label>
+                    <input type="text" id="visibility" name="visibility" value="{{ campaign.visibility }}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
