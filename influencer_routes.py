@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, url_for, ses
 import os
 from werkzeug.utils import secure_filename
 from app import app
-from models import db, Influencer, Company, Admin , Campaign , InterestedCampaigns
+from models import db, Influencer, Company, Admin , Campaign , InterestedCampaigns, AdRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -237,7 +237,7 @@ def influencer_requests():
     user = Influencer.query.get(session['influencer_id'])
     if not user:
         flash('User not found!', 'error')
-        return redirect(url_for('login'))  # Redirect to login or another page
+        return redirect(url_for('influencer_login'))  # Redirect to login or another page
     return render_template('influencer_requests.html', user=user)
 
 
@@ -273,15 +273,71 @@ def express_interest(campaign_id):
 
     return redirect(url_for('request_status'))
 
+
+
+@app.route('/influencer/campaign/requests')
+@influencer_auth_required
+def influencer_campaign_requests():
+    user = Influencer.query.get(session['influencer_id'])
+    
+    # Query AdRequest where the influencer_id matches the current user
+    requests = db.session.query(AdRequest).filter(AdRequest.influencer_id == user.id).all()
+    
+    # Debug: Print the requests to verify
+    print(requests)
+    
+    # Separate requests by status
+    pending_requests = [req for req in requests if req.status == 'pending']
+    accepted_requests = [req for req in requests if req.status == 'accepted']
+    rejected_requests = [req for req in requests if req.status == 'rejected']
+    
+    return render_template('influencer_requests.html', user=user, pending_requests=pending_requests, accepted_requests=accepted_requests, rejected_requests=rejected_requests)
+
+
+
+@app.route('/influencer/requests/accept/<int:request_id>', methods=['POST'])
+@influencer_auth_required
+def influencer_accept_request(request_id):
+    request = AdRequest.query.get(request_id)
+    if request:
+        request.status = 'accepted'
+        db.session.commit()
+
+        # Redirect to the actioned page to reflect the changes
+        return redirect(url_for('influencer_request_actioned'))
+    
+    return jsonify({'status': 'error', 'message': 'Request not found'})
+
+
+@app.route('/influencer/reject/<int:request_id>', methods=['POST'])
+@influencer_auth_required
+def influencer_reject_request(request_id):
+    request = AdRequest.query.get(request_id)
+    if request:
+        request.status = 'rejected'
+        db.session.commit()
+
+        # Redirect to the actioned page to reflect the changes
+        return redirect(url_for('influencer_request_actioned'))
+    
+    return jsonify({'status': 'error', 'message': 'Request not found'})
+
+
+
+
+
 @app.route('/influencer/request_actioned')
 @influencer_auth_required
 def influencer_request_actioned():
     user = Influencer.query.get(session['influencer_id'])
-    return render_template('influencer_request_actioned.html', user=user)
 
+    # Query for all AdRequests where the influencer_id matches the user and the status is accepted or rejected
+    actioned_requests = db.session.query(AdRequest).filter(
+        AdRequest.influencer_id == user.id,
+        AdRequest.status.in_(['accepted', 'rejected'])
+    ).all()
 
-
-
+    return render_template('influencer_request_actioned.html', user=user, actioned_requests=actioned_requests)
 
 
 

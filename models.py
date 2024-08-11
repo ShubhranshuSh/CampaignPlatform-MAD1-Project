@@ -100,6 +100,22 @@ class InterestedCampaigns(db.Model):
     campaign = db.relationship('Campaign', backref=db.backref('interested_influencers', lazy=True))
     company = db.relationship('Company', backref=db.backref('company_interests', lazy=True))
 
+class AdRequest(db.Model):
+    __tablename__ = 'ad_requests'  # Add the table name to ensure it's set
+
+    id = db.Column(db.Integer, primary_key=True)
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    requested_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(50), nullable=False)
+    
+    influencer = db.relationship('Influencer', backref='ad_requests')
+    campaign = db.relationship('Campaign', backref='ad_requests')
+    company = db.relationship('Company', backref='ad_requests')
+
+
+
 
 
 

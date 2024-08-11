@@ -116,8 +116,9 @@
             flex-wrap: wrap;
             justify-content: space-around;
             margin-top: 20px;
+            margin-left: 250px; /* Push content to the right of the sidebar */
             width: calc(100% - 250px); /* Sidebar width adjustment */
-            margin-left: 250px; /* Push content to the right */
+            padding: 20px; /* Add padding to create space around the cards */
         }
         
         .campaign-card {
@@ -165,10 +166,10 @@
         <div class="sidebar">
             <div class="logo">IESCP</div>
             <ul>
-                <li><a href="{{url_for('company_home')}}">Home</a></li>
+                <li><a href="{{ url_for('company_home') }}">Home</a></li>
                 <li><a href="{{ url_for('influencer_search') }}">Influencer</a></li>
                 <li><a href="{{ url_for('company_activity') }}">Activity</a></li>
-                <li><a href="{{url_for('company_requests')}}">Requests</a></li>
+                <li><a href="{{ url_for('company_requests') }}">Requests</a></li>
                 <li><a href="#">Help & Support</a></li>
             </ul>
             <div class="profile">
@@ -188,9 +189,13 @@
                 <div class="campaign-title">{{ campaign.title }}</div>
                 <div class="campaign-description">{{ campaign.description }}</div>
                 <div class="campaign-category">Category: {{ campaign.category }}</div>
-                <button class="send-request-btn">Send Request</button>
+                <form method="POST" action="{{ url_for('company_send_request', campaign_id=campaign.id) }}">
+                    <button class="send-request-btn">Send Request</button>
+                </form>
             </div>
             {% endfor %}
         </div>
+        
+        
     </div>
 {% endblock %}

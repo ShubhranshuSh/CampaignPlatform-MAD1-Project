@@ -183,6 +183,35 @@
                 <a href="{{url_for('influencer_request_actioned')}}" class="tab active">Actioned Status</a>
             </div>
 
+            <div id="tab-content">
+                <!-- Actioned Requests Tab Content -->
+                <div id="actioned-tab-content">
+                    <div class="request-list">
+                        {% if actioned_requests %}
+                            {% for request in actioned_requests %}
+                                <div class="request-item">
+                                    <h3>{{ request.campaign.title }}</h3>
+                                    <p>Company: {{ request.company.company_name }}</p>
+                                    <p>Industry Type: {{ request.company.industry }}</p>
+                                    <p>Campaign: {{ request.campaign.title }}</p>
+                                    <p>Status: 
+                                        {% if request.status == 'accepted' %}
+                                            <span class="status-accepted">Accepted</span>
+                                        {% elif request.status == 'rejected' %}
+                                            <span class="status-rejected">Rejected</span>
+                                        {% endif %}
+                                    </p>
+                                    <button class="btn btn-primary"><a href="{{ request.company.website }}" target="_blank">Visit Website</a></button>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No actioned requests to display.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+
             <!-- <div class="status-list">
                 {% for interest in interests %}
                 <div class="status-item">

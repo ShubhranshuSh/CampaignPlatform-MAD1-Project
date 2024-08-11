@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 import os
 from werkzeug.utils import secure_filename
 from app import app
-from models import db, Influencer, Company, Admin , Campaign
+from models import db, Influencer, Company, Admin , Campaign, AdRequest, InterestedCampaigns
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -20,5 +20,3 @@ def user_category():
 @app.route('/welcome_msg')
 def welcome_msg():
     return render_template('welcome.html')
-
-

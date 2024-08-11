@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 import os
 from werkzeug.utils import secure_filename
 from app import app
-from models import db, Influencer, Company , Campaign , InterestedCampaigns
+from models import db, Influencer, Company , Campaign , InterestedCampaigns,AdRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
@@ -421,8 +421,51 @@ def campaign_delete_post(campaign_id):
 @company_auth_required
 def company_request_sender():
     user = Company.query.get(session['company_id'])
-    campaigns = Campaign.query.filter_by(company_id=user.id).all()
+    
+    if not user:
+        flash('User not found!', 'error')
+        return redirect(url_for('company_login'))  # Redirect to login or another page
+    
+    campaigns = Campaign.query.filter_by(company_id=user.id).all()  # Fetch campaigns associated with the company
+    
     return render_template('company_request_sender.html', user=user, campaigns=campaigns)
+
+
+
+
+@app.route('/company/request_status')
+@company_auth_required
+def company_request_status():
+    user = Company.query.get(session['company_id'])
+    interests = AdRequest.query.filter_by(company_id=user.id).all()
+    return render_template('company_request_status.html', user=user, interests=interests)
+
+
+
+@app.route('/send_request/<int:campaign_id>', methods=['POST'])
+@company_auth_required
+def company_send_request(campaign_id):
+    user_id = session['company_id']
+    campaigns = Campaign.query.get_or_404(campaign_id)
+    influencer_id = campaigns.company_id  # Fix here: use campaigns.company_id to get the influencer's company_id
+
+    existing_interest = AdRequest.query.filter_by(
+        company_id=user_id,
+        campaign_id=campaign_id
+    ).first()
+
+    if not existing_interest:
+        interest = AdRequest(
+            company_id=user_id,
+            campaign_id=campaign_id,
+            influencer_id=influencer_id,  # Fix here: use the correct influencer_id
+            status='pending'
+        )
+        db.session.add(interest)
+        db.session.commit()
+
+    return redirect(url_for('company_request_status'))
+
 
 
 
@@ -476,11 +519,7 @@ def reject_request(request_id):
 
 
 
-@app.route('/company/request_status')
-@company_auth_required
-def company_request_status():
-    user = Company.query.get(session['company_id'])
-    return render_template('company_request_status.html', user=user)
+
 
 
 
