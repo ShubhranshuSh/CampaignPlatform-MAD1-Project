@@ -279,7 +279,7 @@
                                     <a href="{{ url_for('admin_campaign_view', campaign_id=campaign.id) }}">{{ campaign.title }}</a>
                                 </div>
                                 <p class="campaign-company">Company: {{ campaign.company.company_name }}</p>
-                                <p class="campaign-budget">Budget: ${{ campaign.budget }}</p>
+                                <p class="campaign-budget">Budget: &#x20B9; {{ campaign.budget }}</p>
                                 <p class="campaign-category">Category: {{ campaign.category }}</p>
                                 <p class="campaign-dates">Start Date: {{ campaign.start_date.strftime('%Y-%m-%d') }} | End Date: {{ campaign.end_date.strftime('%Y-%m-%d') }}</p>
                             </div>
