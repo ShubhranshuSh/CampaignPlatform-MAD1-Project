@@ -122,7 +122,7 @@
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-left: 250px; /* Add margin to prevent overlap with sidebar */
+            margin-left: 250px; 
             overflow-y: auto;
         }
 
@@ -185,9 +185,8 @@
                 <a href="{{url_for('request_status')}}" class="tab">Status</a>
                 <a href="{{url_for('influencer_request_actioned')}}" class="tab active">Actioned</a>
             </div>
-
+        
             <div id="tab-content">
-                <!-- Actioned Requests Tab Content -->
                 <div id="actioned-tab-content">
                     <div class="request-list">
                         {% if actioned_requests %}
@@ -204,7 +203,12 @@
                                             <span class="status-rejected">Rejected</span>
                                         {% endif %}
                                     </p>
-                                    <button class="btn btn-primary"><a href="{{ request.company.website }}" target="_blank">Visit Website</a></button>
+                                    {% if request.campaign.is_flag %}
+                                        <p style="color: red; font-weight: bold;">Flagged by Admin</p>
+                                    {% endif %}
+                                    <button class="btn btn-primary">
+                                        <a href="{{ request.company.website }}" target="_blank" style="color: white; text-decoration: none;">Visit Website</a>
+                                    </button>
                                 </div>
                             {% endfor %}
                         {% else %}
@@ -213,19 +217,6 @@
                     </div>
                 </div>
             </div>
-            
-
-            <!-- <div class="status-list">
-                {% for interest in interests %}
-                <div class="status-item">
-                    <h3>{{ interest.campaign.title }}</h3>
-                    <p>Company: {{interest.company.company_name}}</p>
-                    <p>Description: {{ interest.campaign.description }}</p>
-                    <p>Budget: {{ interest.campaign.budget }}</p>
-                    <p class="status {{ interest.status}}">{{ interest.status }}</p>
-                </div>
-                {% endfor %}
-            </div> -->
         </div>
     </div>
 {% endblock %}

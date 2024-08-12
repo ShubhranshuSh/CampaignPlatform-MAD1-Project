@@ -119,20 +119,16 @@ def admin_home():
     selected_category = request.args.get('category', '')
     selected_sort = request.args.get('sort', 'latest')
 
-   
-    campaigns_query = Campaign.query.filter_by(visibility='public').filter(Campaign.is_flag == False).filter(Campaign.status != 'done')
+    campaigns_query = Campaign.query.filter(Campaign.is_flag == False).filter(Campaign.status != 'done')
 
-    
     if selected_category:
         campaigns_query = campaigns_query.filter_by(category=selected_category)
 
-   
     if selected_sort == 'oldest':
         campaigns = campaigns_query.order_by(Campaign.created_at.asc()).all()
     else:
         campaigns = campaigns_query.order_by(Campaign.created_at.desc()).all()
 
-    
     categories = [
         "Fashion", 
         "Beauty", 

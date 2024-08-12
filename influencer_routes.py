@@ -227,7 +227,7 @@ def campaign_detail(campaign_id):
     campaign = Campaign.query.get(campaign_id)
     if not campaign:
         flash('Campaign not found!', 'error')
-        return redirect(url_for('influencer_home'))  # Redirect to a safe page
+        return redirect(url_for('influencer_home'))  
     user = Influencer.query.get(session['influencer_id'])
     return render_template('influencer_campaign_view.html', campaign=campaign, user=user)
 
@@ -238,7 +238,7 @@ def influencer_requests():
     user = Influencer.query.get(session['influencer_id'])
     if not user:
         flash('User not found!', 'error')
-        return redirect(url_for('influencer_login'))  # Redirect to login or another page
+        return redirect(url_for('influencer_login'))  
     return render_template('influencer_requests.html', user=user)
 
 
@@ -316,8 +316,6 @@ def influencer_reject_request(request_id):
         return redirect(url_for('influencer_request_actioned'))
     
     return jsonify({'status': 'error', 'message': 'Request not found'})
-
-
 
 
 

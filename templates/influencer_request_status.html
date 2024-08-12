@@ -231,15 +231,19 @@
                 <a href="{{url_for('request_status')}}" class="tab active">Status</a>
                 <a href="{{url_for('influencer_request_actioned')}}" class="tab">Actioned</a>
             </div>
-
+        
             <div class="status-list">
                 {% for interest in interests %}
                 <div class="status-item">
                     <h3>{{ interest.campaign.title }}</h3>
-                    <p>Company: {{interest.company.company_name}}</p>
+                    <p>Company: {{ interest.company.company_name }}</p>
                     <p>Description: {{ interest.campaign.description }}</p>
                     <p>Budget: {{ interest.campaign.budget }}</p>
-                    <p class="status {{ interest.status}}">{{ interest.status }}</p>
+                    <p class="status {{ interest.status }}">{{ interest.status }}</p>
+                    
+                    {% if interest.campaign.is_flag %}
+                        <p style="color: red; font-weight: bold;">Flagged by Admin</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
