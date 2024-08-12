@@ -15,7 +15,6 @@ class Admin(db.Model):
     password_hash = db.Column(db.String(200), nullable=False)
     name = db.Column(db.String(150), nullable=False)
     
-    # New relationship with Campaign
     campaigns = db.relationship('Campaign', backref='admin', lazy=True)
 
 
@@ -66,7 +65,7 @@ class Campaign(db.Model):
     end_date = db.Column(db.Date, nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     
-    # Foreign key to Admin with default value
+    
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=False, default=1)
     
     status = db.Column(db.String(50), nullable=False, default='pending')
@@ -75,7 +74,7 @@ class Campaign(db.Model):
     visibility = db.Column(db.String(50), nullable=False, default='public')
     influencers = db.relationship('Influencer', secondary=influencer_campaign_association, back_populates='campaigns')
     
-    # New 'is_flag' column with default value set to False
+   
     is_flag = db.Column(db.Boolean, nullable=False, default=False)
 
     @property
@@ -112,7 +111,7 @@ class InterestedCampaigns(db.Model):
     company = db.relationship('Company', backref=db.backref('company_interests', lazy=True))
 
 class AdRequest(db.Model):
-    __tablename__ = 'ad_requests'  # Add the table name to ensure it's set
+    __tablename__ = 'ad_requests'  
 
     id = db.Column(db.Integer, primary_key=True)
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
@@ -127,13 +126,10 @@ class AdRequest(db.Model):
 
 
 
-
-
-
 with app.app_context():
     db.create_all()
 
-    # To check whether there's an admin or not
+    
     admin=Admin.query.filter_by(username='admin').first()
     if not admin:
         password_hash = generate_password_hash('admin')
