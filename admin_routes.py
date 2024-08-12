@@ -49,6 +49,7 @@ def admin_login_post():
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/dashboard')
+@admin_auth_required
 def admin_dashboard():
     user = session.get('admin_id')
     total_influencers = Influencer.query.count()
