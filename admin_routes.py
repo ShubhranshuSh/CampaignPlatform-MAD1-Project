@@ -6,8 +6,8 @@ from models import db, Influencer, Company, Admin , Campaign , InterestedCampaig
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
-import matplotlib.pyplot as plt
-import io
+# import matplotlib.pyplot as plt
+# import io
 import base64
 import plotly.graph_objects as go
 import kaleido
