@@ -46,8 +46,8 @@ IESCP is a dynamic web platform that connects companies with social media influe
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/iescp-platform.git
-cd iescp-platform
+git clone https://github.com/ShubhranshuSh/CampaignPlatform-MAD1-Project.git
+cd CampaignPlatform-MAD1-Project
 ```
 
 ### 2. Create a virtual environment
